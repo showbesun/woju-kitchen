@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>자취방 미슐랭 | 蝸居米其林</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Sans+TC:wght@400;700;900&family=Black+Han+Sans&family=Jua&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Base */
+      --bg: #FAF8F6;
+      --surface: #FFFFFF;
+      --cream: #E8D7CD;
+      --line: #D8CFC9;
+
+      /* Text */
+      --text: #2C2220;
+      --text-muted: #7E7068;
+      --placeholder: #9D9087;
+
+      /* Brand */
+      --brand: #7D5A52;
+      --brand-dark: #65453F;
+      --brand-light: #F5EDEA;
+
+      /* Accent */
+      --accent-gold: #B8895B;
+      --accent-gold-light: #FFF6EC;
+
+      /* Radius */
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
+      --radius-pill: 999px;
+      --radius-icon: 50%;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--surface);
+      color: var(--text);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .logo { display: flex; flex-direction: column; gap: 2px; }
+
+    .logo-main {
+      font-size: 34px;
+      color: var(--brand);
+      letter-spacing: 3px;
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+      font-weight: 900;
+    }
+
+    .logo-sub {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 3px;
+    }
+
+    .btn-add {
+      background: var(--brand);
+      color: var(--surface);
+      border: none;
+      padding: 10px 20px;
+      font-size: 13px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      border-radius: var(--radius-sm);
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+    }
+    .btn-add:hover { background: var(--brand-dark); color: var(--surface); }
+
+    .search-bar {
+      background: var(--bg);
+      padding: 16px 40px;
+      display: flex;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .search-input {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: var(--radius-sm);
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+      outline: none;
+    }
+    .search-input::placeholder { color: #bbb; }
+    .search-input:focus { border-color: var(--brand); }
+
+    .filter-select {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 10px 16px;
+      font-size: 13px;
+      border-radius: var(--radius-sm);
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      outline: none;
+    }
+    .filter-select:focus { border-color: var(--brand); }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+
+
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .recipe-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      position: relative;
+      z-index: 1;
+    }
+    .recipe-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.09);
+    }
+
+    .card-header {
+      background: var(--cream);
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-cuisine {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--brand);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      color: var(--text);
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--placeholder);
+      margin-top: 4px;
+    }
+
+    .card-body { padding: 20px; }
+
+    .card-meta { display: flex; justify-content: space-between; margin-bottom: 16px; }
+
+    .meta-item { display: flex; flex-direction: column; gap: 2px; }
+
+    .meta-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--placeholder);
+    }
+
+    .meta-value { font-size: 14px; }
+
+    /* modal 內放大 meta */
+    .modal-meta .meta-label { font-size: 11px; }
+    .modal-meta .meta-value { font-size: 17px; font-weight: 600; }
+
+    .card-tags { display: flex; flex-wrap: nowrap; overflow: hidden; gap: 6px; }
+
+    .tag, .tag-dark {
+      font-size: 11px;
+      padding: 3px 11px;
+      border: 1.5px solid var(--placeholder);
+      color: var(--brand);
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      overflow-y: auto;
+      padding: 40px 20px;
+    }
+    .modal-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
+
+    .modal {
+      background: var(--surface);
+      max-width: 720px;
+      width: 100%;
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .modal-header {
+      background: var(--cream);
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-cuisine {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--brand);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      font-size: 32px;
+      color: var(--text);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .modal-subtitle { font-size: 15px; color: var(--placeholder); }
+    .recipe-note {
+      font-size: 13.5px; color: var(--placeholder); line-height: 1.8;
+      padding: 2px 0 2px 16px; margin: 20px 0 24px;
+      border-left: 2px dashed var(--line);
+      font-style: italic;
+    }
+
+    .modal-body { padding: 28px 32px; }
+
+    .modal-meta {
+      display: flex;
+      gap: 32px;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+      align-items: flex-end;
+    }
+
+    .portion-scaler {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .portion-scaler label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--placeholder);
+    }
+
+    .portion-btn {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--line);
+      width: 28px;
+      height: 28px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .portion-btn:hover { background: var(--cream); border-color: var(--brand); }
+
+    .portion-count {
+      font-size: 18px;
+      font-weight: 700;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .modal-section { margin-bottom: 32px; }
+
+    .modal-section-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--brand);
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 15px; }
+
+    th {
+      text-align: left;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--placeholder);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--line);
+      font-weight: normal;
+    }
+
+    td {
+      padding: 8px 12px;
+      line-height: 1.5;
+    }
+
+    .steps-list { list-style: none; }
+
+    .steps-phase {
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--brand);
+      font-weight: 700;
+      padding: 14px 0 8px;
+      border-bottom: 1px solid var(--brand-light);
+      margin-bottom: 12px;
+      margin-top: 8px;
+    }
+
+    .steps-phase:first-child { margin-top: 0; }
+
+    .steps-list li {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .step-num {
+      background: var(--brand);
+      color: var(--surface);
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 24px;
+      height: 24px;
+      border-radius: var(--radius-icon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    /* 備料清單 */
+    .shopping-group-header td {
+      padding-top: 14px;
+      padding-bottom: 4px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--brand);
+    }
+
+    .shopping-group-note {
+      font-weight: normal;
+      font-size: 13px;
+      color: var(--placeholder);
+      letter-spacing: 0;
+    }
+
+    .shopping-sub td {
+      font-size: 15px;
+      color: var(--text);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+
+    .shopping-sub td:first-child {
+      padding-left: 20px;
+    }
+
+    .paren-note {
+      font-size: 0.82em;
+      color: var(--placeholder);
+    }
+
+    .tips-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tips-list li {
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 12px 16px;
+      background: var(--cream);
+      border-left: 3px solid var(--brand);
+    }
+
+    .schedule-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .schedule-list li {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .schedule-time {
+      color: var(--brand);
+      font-size: 12px;
+      min-width: 52px;
+      padding-top: 2px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--placeholder);
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--text); }
+
+    /* FORM */
+    .form-group { margin-bottom: 20px; }
+    .form-hint { font-size: 11.5px; color: var(--placeholder); margin-bottom: 8px; line-height: 1.6; }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+      color: var(--text);
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--brand); }
+    .form-textarea { min-height: 80px; resize: vertical; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .btn-submit {
+      background: var(--brand);
+      color: var(--surface);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 14px 32px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+      width: 100%;
+      margin-top: 8px;
+      transition: background 0.12s;
+    }
+    .btn-submit:hover { background: var(--brand-dark); }
+    .tag-check-grid { display: flex; flex-direction: column; gap: 12px; }
+    .tag-check-row { display: flex; align-items: flex-start; gap: 8px; }
+    .tag-check-row-label { font-size: 11px; color: var(--placeholder); min-width: 42px; padding-top: 5px; flex-shrink: 0; }
+    .tag-pills-wrap { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+    .tag-check { display: inline-block; font-size: 13px; padding: 4px 12px; border: 1.5px solid var(--line); border-radius: var(--radius-pill); cursor: pointer; transition: background 0.12s, border-color 0.12s; user-select: none; }
+    .tag-check input[type="checkbox"] { display: none; }
+    .tag-check:has(input:checked) { background: var(--cream); border-color: var(--brand); }
+    .tag-check-del { margin-left: 5px; font-size: 11px; color: var(--placeholder); vertical-align: middle; }
+    .tag-check-del:hover { color: var(--text); }
+    .tag-custom-wrap { display: flex; align-items: center; gap: 4px; }
+    .tag-custom-input { font-size: 13px; padding: 4px 12px; border: 1.5px solid var(--line); border-radius: var(--radius-pill); outline: none; width: 110px; background: var(--surface); color: var(--text); font-family: inherit; }
+    .tag-custom-input:focus { border-color: var(--brand); }
+    .tag-custom-add { font-size: 15px; line-height: 1; width: 28px; height: 28px; border: 1.5px solid var(--line); border-radius: var(--radius-icon); background: none; cursor: pointer; color: var(--placeholder); display: flex; align-items: center; justify-content: center; transition: border-color 0.12s, color 0.12s; }
+    .tag-custom-add:hover { border-color: var(--brand); color: var(--brand); }
+    #custom-tags-container { display: flex; flex-wrap: wrap; gap: 6px; }
+    .step-phase-block { border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 10px; }
+    .step-phase-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .step-phase-header .form-input { flex: 1; margin: 0; font-weight: 600; }
+    .step-phase-remove { background: none; border: none; color: var(--placeholder); font-size: 20px; line-height: 1; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
+    .step-phase-remove:hover { color: var(--text); }
+    .step-phase-steps { min-height: 72px; resize: vertical; }
+    .btn-add-phase { display: block; width: 100%; padding: 9px; border: 1.5px dashed var(--line); border-radius: var(--radius-sm); background: none; color: var(--placeholder); font-size: 13px; cursor: pointer; font-family: inherit; letter-spacing: 0.5px; transition: border-color 0.12s, color 0.12s; }
+    .btn-add-phase:hover { border-color: var(--brand); color: var(--brand); }
+    .form-actions { display: flex; gap: 10px; }
+    .btn-preview { flex: 1; padding: 13px; border: 1.5px solid var(--brand); border-radius: var(--radius-sm); background: none; color: var(--brand); font-size: 14px; font-family: inherit; cursor: pointer; transition: background 0.12s; }
+    .btn-preview:hover { background: var(--brand-light); }
+    .detail-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 20px 0 4px; border-top: 1px solid var(--line); margin-top: 24px; }
+    .btn-detail-edit { font-size: 13px; padding: 7px 16px; border: 1.5px solid var(--brand); border-radius: var(--radius-pill); background: none; color: var(--brand); cursor: pointer; font-family: inherit; transition: background 0.12s; }
+    .btn-detail-edit:hover { background: var(--brand-light); }
+    .btn-detail-delete { font-size: 13px; padding: 7px 16px; border: 1.5px solid var(--line); border-radius: var(--radius-pill); background: none; color: var(--placeholder); cursor: pointer; font-family: inherit; transition: color 0.12s, border-color 0.12s; }
+    .btn-detail-delete:hover { border-color: #c0392b; color: #c0392b; }
+    .preview-banner { display: none; background: var(--cream); padding: 10px 16px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; align-items: center; justify-content: space-between; gap: 8px; }
+    .preview-banner-label { font-size: 12px; color: var(--brand); letter-spacing: 0.5px; }
+    .btn-back { font-size: 13px; padding: 6px 14px; border-radius: var(--radius-pill); border: 1.5px solid var(--placeholder); background: none; color: var(--placeholder); cursor: pointer; font-family: inherit; white-space: nowrap; transition: border-color 0.12s, color 0.12s; }
+    .btn-back:hover { border-color: var(--brand-dark); color: var(--brand-dark); }
+    .btn-publish { font-size: 13px; padding: 6px 14px; border-radius: var(--radius-pill); border: 1.5px solid var(--brand); background: var(--brand); color: var(--surface); cursor: pointer; font-family: inherit; white-space: nowrap; transition: background 0.12s; }
+    .btn-publish:hover { background: var(--brand-dark); border-color: var(--brand-dark); }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--placeholder);
+    }
+    .empty-state h3 { font-size: 18px; font-weight: normal; margin-bottom: 8px; }
+    .empty-state p { font-size: 13px; }
+
+    /* ── 購物清單功能 ── */
+    .recipe-card { position: relative; }
+    .cart-btn {
+      position: absolute; top: 10px; right: 10px;
+      width: 26px; height: 26px; border-radius: var(--radius-icon);
+      border: 1.5px solid var(--line);
+      background: var(--surface); color: var(--placeholder);
+      cursor: pointer; font-size: 15px; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.18s; line-height: 1; z-index: 2;
+    }
+    .cart-btn:hover { border-color: var(--brand); color: var(--brand); background: var(--surface); }
+    .cart-btn.active { background: var(--brand); border-color: var(--brand); color: var(--surface); }
+
+    .main-layout {
+      display: flex; align-items: flex-start; gap: 32px;
+      padding-left: 80px;
+    }
+    .recipe-section { flex: 1; min-width: 0; }
+    #cart-sidebar {
+      width: 168px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 14px;
+      border-left: 1px solid var(--line); padding-left: 28px;
+      position: sticky; top: 32px;
+    }
+    .chef-girl {
+      position: fixed;
+      left: 19px;
+      bottom: 0;
+      height: 380px;
+      width: auto;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+    .cart-sidebar-title {
+      font-size: 20px; font-weight: 700; letter-spacing: 1px;
+      color: var(--text); padding-bottom: 12px;
+      border-bottom: 2px solid var(--text);
+      font-family: 'Black Han Sans', 'Noto Sans KR', sans-serif;
+    }
+    #cart-cards-area {
+      flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 40px;
+    }
+    .cart-empty-hint { font-size: 12px; color: #bbb; letter-spacing: 0.5px; }
+    .cart-mini-card {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      background: var(--surface); color: var(--text);
+      padding: 6px 8px 6px 10px; font-size: 11px;
+      border: 1px solid var(--line); border-radius: var(--radius-sm); letter-spacing: 0.5px;
+    }
+    .cart-mini-remove {
+      background: none; border: none; color: var(--placeholder);
+      cursor: pointer; font-size: 14px; padding: 0; line-height: 1; flex-shrink: 0;
+    }
+    .cart-mini-remove:hover { color: var(--text); }
+    .btn-cart-go {
+      width: 100%; background: var(--brand); border: none; color: var(--surface);
+      padding: 10px 0; font-size: 11px; cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif; letter-spacing: 1px; font-weight: bold;
+      border-radius: var(--radius-sm); transition: background 0.18s;
+    }
+    .btn-cart-go:hover { background: var(--brand-dark); color: var(--surface); }
+    .btn-cart-go:disabled { background: #ddd; cursor: default; color: #aaa; }
+    #d-cart-btn {
+      padding: 7px 16px; white-space: nowrap; flex-shrink: 0;
+      background: transparent; border: 1.5px solid var(--line);
+      color: var(--placeholder); font-size: 12px; letter-spacing: 1px;
+      cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
+      transition: all 0.18s;
+    }
+    #d-cart-btn:hover { border-color: var(--brand); color: var(--brand); }
+    #d-cart-btn.active { background: var(--brand); border-color: var(--brand); color: var(--surface); font-weight: bold; }
+    .cart-section-label {
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--placeholder); padding: 10px 0 4px; border-bottom: 1px solid var(--line);
+      margin-bottom: 4px; margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; }
+      .search-bar { padding: 0 20px 16px; flex-direction: column; }
+      .container { padding: 24px 20px; }
+      .modal-body { padding: 24px 20px; }
+      .modal-header { padding: 24px 20px; }
+      .modal-meta { flex-wrap: wrap; gap: 16px; }
+      .form-row { grid-template-columns: 1fr; }
+      .recipe-grid { grid-template-columns: 1fr; }
+      .main-layout { flex-direction: column; }
+      #cart-sidebar {
+        width: 100%; border-left: none; padding-left: 0;
+        border-top: 1px solid var(--line); padding-top: 24px;
+        position: static; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px;
+      }
+      .cart-sidebar-title { border-bottom: none; padding-bottom: 0; }
+      #cart-cards-area { flex-direction: row; flex-wrap: wrap; min-height: unset; }
+      .btn-cart-go { width: auto; padding: 9px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-main">蝸居米其林</div>
+    <div class="logo-sub">자취방 미슐랭 · STEPHANY'S KITCHEN</div>
+  </div>
+  <button class="btn-add" onclick="openAddModal()">+ 新增食譜</button>
+</header>
+
+<div class="search-bar">
+  <input class="search-input" type="text" id="searchInput" placeholder="搜尋食譜名稱、菜系、標籤..." oninput="renderRecipes()" />
+  <select class="filter-select" id="cuisineFilter" onchange="renderRecipes()">
+    <option value="">所有菜系</option>
+    <option value="台式">台式</option>
+    <option value="韓式">韓式</option>
+    <option value="日式">日式</option>
+    <option value="中式">中式</option>
+    <option value="義式">義式</option>
+    <option value="西式">西式</option>
+    <option value="融合">融合</option>
+  </select>
+</div>
+
+<div class="container">
+  <div class="main-layout">
+    <div class="recipe-section">
+      <div class="recipe-grid" id="recipeGrid"></div>
+    </div>
+    <div id="cart-sidebar">
+      <div class="cart-sidebar-title">今天吃什麼？</div>
+      <div id="cart-cards-area">
+        <span class="cart-empty-hint">點 ＋ 加入食譜</span>
+      </div>
+      <button class="btn-cart-go" id="cart-go-btn" onclick="openCartModal()" disabled>衝去買菜！🛒</button>
+    </div>
+  </div>
+</div>
+
+<img src="chef-girl.png" class="chef-girl" alt="" />
+
+<!-- Recipe Detail Modal -->
+<div class="modal-overlay" id="detailModal" onclick="closeDetailIfOutside(event)">
+  <div class="modal">
+    <div id="preview-banner" class="preview-banner">
+      <span class="preview-banner-label">偷看成品中</span>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-back" onclick="closeModal('detailModal')">← 回廚房改一下</button>
+        <button class="btn-publish" onclick="publishRecipe()">上菜！</button>
+      </div>
+    </div>
+    <div class="modal-header">
+      <button id="detail-modal-close" class="modal-close" onclick="closeModal('detailModal')">✕</button>
+      <div class="modal-title" id="d-title"></div>
+      <div id="d-author" style="display:none; font-size:13px; color:var(--text-muted); margin-top:6px; margin-bottom:12px;"></div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+        <div id="d-tags" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+        <button id="d-cart-btn" onclick="toggleCartFromDetail()">🛒 加入購物清單</button>
+      </div>
+    </div>
+    <div class="modal-body">
+
+      <div class="modal-meta">
+        <div class="meta-item">
+          <span class="meta-label">時間</span>
+          <span class="meta-value" id="d-time"></span>
+        </div>
+        <div class="portion-scaler">
+          <label>幾人份？</label>
+          <button class="portion-btn" onclick="changePortion(-1)">−</button>
+          <span class="portion-count" id="d-portion-count">2</span>
+          <button class="portion-btn" onclick="changePortion(1)">+</button>
+        </div>
+      </div>
+
+      <div id="d-note" class="recipe-note" style="display:none;"></div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">🛒 備料清單</div>
+        <table><thead><tr><th>食材 / 調味料</th><th>份量</th></tr></thead>
+        <tbody id="d-shopping"></tbody></table>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">🍳 實戰步驟</div>
+        <ol class="steps-list" id="d-steps"></ol>
+      </div>
+
+      <div class="modal-section" id="d-tips-section">
+        <div class="modal-section-title">💡 新手 Tips</div>
+        <ul class="tips-list" id="d-tips"></ul>
+      </div>
+
+      <div class="modal-section" id="d-schedule-section">
+        <div class="modal-section-title">⏱️ 時間規劃</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <label style="font-size:12px;color:var(--placeholder);letter-spacing:1px;">幾點開始煮？</label>
+          <input type="time" id="d-start-time" value="18:20" oninput="recalcSchedule()"
+            style="background:var(--cream);border:1px solid var(--brand);border-radius:var(--radius-sm);padding:6px 10px;font-size:14px;font-family:'Noto Sans KR',serif;color:var(--text);outline:none;cursor:pointer;" />
+        </div>
+        <ul class="schedule-list" id="d-schedule"></ul>
+      </div>
+
+      <div class="detail-actions" id="d-actions">
+        <button class="btn-detail-delete" onclick="deleteRecipe(currentRecipe && currentRecipe.id)">刪除食譜</button>
+        <button class="btn-detail-edit" onclick="openEditModal(currentRecipe && currentRecipe.id)">✏️ 編輯食譜</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Add Recipe Modal -->
+<div class="modal-overlay" id="addModal" onclick="closeDetailIfOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+      <div class="modal-cuisine">New Recipe</div>
+      <div class="modal-title" id="addModal-title">新增食譜</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">食譜名稱</label>
+          <input class="form-input" id="f-title" placeholder="例：大口吃肉泡菜鍋" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">上菜人</label>
+          <input class="form-input" id="f-author" placeholder="例：知知、令令、鮪魚" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">菜系</label>
+          <select class="form-select" id="f-cuisine">
+            <option value="台式">台式</option>
+            <option value="韓式">韓式</option>
+            <option value="日式">日式</option>
+            <option value="中式">中式</option>
+            <option value="義式">義式</option>
+            <option value="西式">西式</option>
+            <option value="融合">融合</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">烹飪時間</label>
+          <select class="form-select" id="f-time">
+            <option value="約15分鐘">約15分鐘</option>
+            <option value="約20分鐘">約20分鐘</option>
+            <option value="約25分鐘">約25分鐘</option>
+            <option value="約30分鐘">約30分鐘</option>
+            <option value="約40分鐘" selected>約40分鐘</option>
+            <option value="約45分鐘">約45分鐘</option>
+            <option value="約1小時">約1小時</option>
+            <option value="約1.5小時">約1.5小時</option>
+            <option value="約2小時">約2小時</option>
+            <option value="約2.5小時">約2.5小時</option>
+            <option value="3小時以上">3小時以上</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">份量基準</label>
+          <input class="form-input" id="f-portions" type="number" min="1" value="2" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">標籤</label>
+        <div class="tag-check-grid">
+          <div class="tag-check-row">
+            <span class="tag-check-row-label">菜系</span>
+            <div class="tag-pills-wrap">
+              <label class="tag-check"><input type="checkbox" name="ftag" value="台式">台式</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="韓式">韓式</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="日式">日式</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="中式">中式</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="義式">義式</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="西式">西式</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="融合">融合</label>
+            </div>
+          </div>
+          <div class="tag-check-row">
+            <span class="tag-check-row-label">食材</span>
+            <div class="tag-pills-wrap">
+              <label class="tag-check"><input type="checkbox" name="ftag" value="雞肉">雞肉</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="鴨肉">鴨肉</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="豬肉">豬肉</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="牛肉">牛肉</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="魚肉">魚肉</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="海鮮">海鮮</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="蛋">蛋</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="豆腐">豆腐</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="蔬菜">蔬菜</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="菇類">菇類</label>
+            </div>
+          </div>
+          <div class="tag-check-row">
+            <span class="tag-check-row-label">型態</span>
+            <div class="tag-pills-wrap">
+              <label class="tag-check"><input type="checkbox" name="ftag" value="下飯菜">下飯菜</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="鍋物">鍋物</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="湯">湯</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="麵">麵</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="飯">飯</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="小菜">小菜</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="醬料">醬料</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="烘焙">烘焙</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="甜點">甜點</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="飲品">飲品</label>
+            </div>
+          </div>
+          <div class="tag-check-row">
+            <span class="tag-check-row-label">情境</span>
+            <div class="tag-pills-wrap">
+              <label class="tag-check"><input type="checkbox" name="ftag" value="一人食">一人食</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="下班後">下班後</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="早午餐">早午餐</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="下午茶">下午茶</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="想吃熱的">想吃熱的</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="30分鐘上桌">30分鐘上桌</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="一鍋到底">一鍋到底</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="週末慢慢煮">週末慢慢煮</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="隔夜更好吃">隔夜更好吃</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="剩菜救援">剩菜救援</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="錢包友善">錢包友善</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="小酌良伴">小酌良伴</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="韓劇感">韓劇感</label>
+              <label class="tag-check"><input type="checkbox" name="ftag" value="生日">生日</label>
+            </div>
+          </div>
+          <div class="tag-check-row">
+            <span class="tag-check-row-label">自訂</span>
+            <div class="tag-pills-wrap">
+              <div class="tag-custom-wrap">
+                <input type="text" id="f-custom-tag" class="tag-custom-input" placeholder="輸入自訂標籤" maxlength="10" />
+                <button type="button" class="tag-custom-add" onclick="addCustomTag()">+</button>
+              </div>
+              <div id="custom-tags-container" style="display:contents;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">食材清單</label>
+        <div class="form-hint">每行一項，格式：食材名｜份量。想補替代食材或小提醒，可以寫在括號裡。</div>
+        <textarea class="form-textarea" id="f-ingredients" style="min-height:120px;" placeholder="豬五花肉｜200g&#10;板豆腐｜半盒&#10;韓式辣椒粉｜1湯匙（可依泡菜辣度調整）&#10;韓式醃蝦醬｜1茶匙（可用少量魚露替代）"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">步驟</label>
+        <div class="form-hint">可以分階段填寫，方便邊煮邊看。步驟不用自己編號，系統會自動排好。</div>
+        <div id="steps-container"></div>
+        <button type="button" class="btn-add-phase" onclick="addStepPhase()">＋ 新增階段</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">新手 Tips（不填也可以）</label>
+        <div class="form-hint">小訣竅、替代食材、防翻車提醒，或是你很想碎念的一句話。</div>
+        <textarea class="form-textarea" id="f-tips" placeholder="擦乾最重要 — 表面有水分就煎不出金黃色"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">時間規劃（不填也可以）</label>
+        <div class="form-hint">格式：分鐘｜說明。用來顯示備料、燉煮、收汁等時間。</div>
+        <textarea class="form-textarea" id="f-schedule" placeholder="0｜備料&#10;15｜下鍋開煮&#10;40｜完成上桌"></textarea>
+      </div>
+      <button class="btn-submit" onclick="previewRecipe()">偷看成品</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="modal-overlay" id="cartModal" onclick="closeDetailIfOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('cartModal')">✕</button>
+      <div class="modal-title">🛒 購物清單</div>
+      <div id="cart-modal-recipes" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <table>
+          <thead><tr><th>食材 / 調味料</th><th>數量</th></tr></thead>
+          <tbody id="cart-modal-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'jajuibang_recipes';
+  const DATA_VERSION = '69';
+  const VERSION_KEY = 'jajuibang_version';
+
+  const defaultRecipes = [
+    {
+      id: 1,
+      title: '阿嬤紅燒雞 2.0',
+      subtitle: '洋蔥・紅蘿蔔・甘栗仁',
+      cuisine: '台式',
+      note: '阿嬤原版是直接加水加醬油燉，我這版先把雞肉煎香一點。不是比較厲害，只是比較搞剛。',
+      stars: 2,
+      starsLabel: '家常實力',
+      tags: ['雞肉', '下飯菜', '一鍋到底', '隔夜更好吃'],
+      basePortions: 2,
+      time: '約45分鐘',
+      shoppingList: [
+        ['雞翅＋棒棒腿', 600, 'g（也可用整隻雞切塊；本食譜採這個組合，因為我就愛）'],
+        ['紅蘿蔔', 0.5, '根'],
+        ['洋蔥', 0.5, '顆'],
+        ['甘栗仁', 1, '包'],
+        ['燒酒', 2, '湯匙'],
+        { label: '靈魂黑金醬汁', note: '碗裡先調好', items: [
+          ['純釀造醬油', 4, '湯匙'],
+          ['蠔油', 1, '湯匙'],
+          ['黑糖', 1.5, '茶匙'],
+        ]},
+      ],
+      steps: [
+        '## 備料',
+        '雞肉徹底擦乾。',
+        '<strong>靈魂黑金醬汁</strong>（純釀造醬油 4 湯匙＋蠔油 1 湯匙＋黑糖 1.5 茶匙）預先在碗裡調好備用。',
+        '<strong>紅蘿蔔</strong>切滾刀塊，<strong>洋蔥</strong>切粗條。',
+        '## 煎鍋逼油上色',
+        '平底鍋下油，大火（7-8）熱鍋，<strong>雞翅</strong>和<strong>棒棒腿</strong>下鍋，多翻動讓每一面都煎到微微金黃、逼出雞油香氣。',
+        '看到雞皮轉金黃時，從鍋邊淋入<strong>燒酒 2湯匙</strong>，利用瞬間激起的蒸汽帶走腥味。',
+        '## 深鍋燜燉',
+        '把煎好的雞肉，連同鍋底亮晶晶的精華雞油，全部移到深鍋裡。',
+        '倒入<strong>200ml 清水</strong>、<strong>紅蘿蔔塊</strong>，以及調好的<strong>靈魂黑金醬汁</strong>，攪拌均勻。',
+        '蓋上鍋蓋，大火（7-8）煮滾後轉中小火（3-4）燜燉 12 分鐘，讓帶骨肉在密閉空間裡徹底熟透。',
+        '## 大火收汁',
+        '打開鍋蓋，把<strong>洋蔥粗條</strong>和<strong>整包甘栗仁</strong>丟進去。',
+        '不要再蓋鍋蓋！轉大火（7-8），讓醬汁持續大滾，從稀稀的液態漸漸變成黏稠琥珀色。',
+        '炒到<strong>洋蔥</strong>變軟，醬汁緊緊裹住雞肉，鍋底還留有一點濃稠醬汁時立刻關火！完成。',
+      ],
+      tips: [
+        '🧻 擦乾是命 — 雞肉有水分就煎不出金黃色，還會噴油燙人',
+        '🍳 鍋邊淋酒 — 不要從中間倒，從鍋邊淋讓酒碰到高溫鍋面瞬間揮發去腥效果最好',
+        '🥕 紅蘿蔔先進 — 它需要時間燜，洋蔥後加才不會煮到消失',
+        '🌊 收汁看鍋底 — 用鏟子劃開鍋底，醬汁不會立刻流回來就代表稠度夠了，立刻關火',
+        '⚡ 收汁不能分心 — 這個階段要守著鍋，過了就焦',
+      ],
+      schedule: [
+        [0, '擦乾雞肉、切菜、調好醬汁'],
+        [10, '煎鍋大火煎雞肉、熗酒'],
+        [18, '移入深鍋，加水+紅蘿蔔+醬汁，燜燉中'],
+        [30, '加洋蔥+栗子，開蓋大火收汁'],
+        [40, '收汁完成，上桌 ✅'],
+      ],
+    },
+    {
+      id: 2,
+      title: '生日那碗韓式海帶湯',
+      subtitle: '乾海帶국',
+      cuisine: '韓式',
+      stars: 1,
+      starsLabel: '新手村',
+      tags: ['牛肉', '湯', '一鍋到底', '生日', '想吃熱的'],
+      basePortions: 2,
+      time: '約40分鐘',
+      shoppingList: [
+        ['乾海帶', 5, 'g'],
+        ['牛腩', 100, 'g'],
+        ['蒜末', 1.5, '瓣份量'],
+        ['高湯', 750, 'ml（推薦昆布魚乾或牛骨風味；高湯塊請依包裝比例調整）'],
+        ['韓式芝麻油（可用香油）', 1, '湯匙'],
+        ['韓式湯醬油（可用日式薄口醬油）', null, '適量'],
+
+      ],
+      steps: [
+        '## 備料',
+        '<strong>乾海帶</strong>多數需泡水 10-15 分鐘軟化，有些款式只需沖洗，依包裝說明為準。',
+        '<strong>牛肉</strong>用廚房紙巾吸乾血水，加<strong>韓式湯醬油 1.5茶匙</strong>，抓醃 5 分鐘。',
+        '## 中小火炒香',
+        '下<strong>韓式芝麻油 1湯匙</strong>，開中小火，放入醃好的<strong>牛肉</strong>炒至表面變白。不要開大火，油會苦。',
+        '加入<strong>蒜末</strong>，輕輕炒出香氣。',
+        '加入<strong>海帶</strong>一起翻炒 2–3 分鐘，直到海帶顏色變深、香氣出來。',
+        '## 燉煮',
+        '淋入<strong>韓式湯醬油 1湯匙</strong>炒勻，倒入<strong>高湯 750ml</strong>，轉大火（7–8）煮滾。',
+        '仔細撈去浮沫，維持中大火（6-7）滾煮 10 分鐘，讓湯頭逐漸轉為乳白色。',
+        '轉中小火（3-4），蓋鍋蓋燉 30 分鐘。',
+        '試味，不夠鹹加少許<strong>鹽</strong>或<strong>韓式湯醬油</strong>，裝碗上桌。',
+      ],
+      tips: [
+        '🌿 乾海帶 多數需泡水 10-15 分鐘 — 有些款式只需沖洗，依包裝說明為準',
+        '🥩 一定要用牛腩— 脂肪和筋膜燉煮後釋放膠質，才有那個厚重的body，瘦肉煮不出來',
+        '🥩 醃牛肉不能省 — 短短5分鐘讓肉更嫩更入味',
+        '🫧 浮沫要仔細撈 — 煮滾後那層灰色泡沫撈乾淨，湯頭才清澈好看',
+      ],
+      schedule: [
+        [0, '牛肉醃漬 5 分鐘'],
+        [5, '中小火炒香牛肉、蒜末、海帶'],
+        [15, '加水，大火煮滾，撈浮沫'],
+        [25, '中大火維持乳白滾煮中'],
+        [35, '轉中小火燉煮中'],
+        [65, '試味收尾，上桌 ✅'],
+      ],
+    },
+    {
+      id: 3,
+      title: '蒜香橄欖油義大利麵',
+      subtitle: '蒜香・辣椒・松露',
+      cuisine: '義式',
+      stars: 3,
+      starsLabel: '深夜炫技',
+      tags: ['麵', '蔬菜', '下班後', '30分鐘上桌'],
+      basePortions: 2,
+      time: '約25分鐘',
+      shoppingList: [
+        ['義大利直麵', 180, 'g（推薦 Spaghetti No.5，最剛好）'],
+        ['大蒜', 8, '瓣（切均勻薄片）'],
+        ['辣椒', 2, '根（愛吃辣再加，不吃辣可省略）'],
+        ['橄欖油', 3, '湯匙'],
+        ['松露橄欖油', null, '1–1.5湯匙（熄火後加，有就封神，沒有可省略）'],
+      ],
+      steps: [
+        '## 煮麵',
+        '深鍋燒一大鍋滾水，加鹽，大火煮滾後下<strong>義大利直麵</strong>。',
+        '比包裝說明提早 <strong>1.5 到 2 分鐘</strong>撈起，麵芯還帶一點硬度。',
+        '撈麵前用馬克杯盛起<strong>煮麵水 200ml</strong>備用，充滿澱粉，是乳化的關鍵。',
+        '## 低溫煸香',
+        '平底鍋不開火，倒入<strong>橄欖油 3湯匙</strong>與所有<strong>蒜片</strong>。',
+        '開小火（2-3）慢慢升溫，看到蒜片周圍冒出綿密小泡泡、邊緣轉成淡淡琥珀金黃色，蒜香就徹底釋放了。',
+        '立刻倒入<strong>辣椒碎</strong>，快速翻炒 15 秒。',
+        '## 大火乳化',
+        '撈起的麵條直接移入平底鍋，火力轉大火（7-8）。',
+        '倒入預留的<strong>煮麵水 100ml</strong>（太乾再補）。',
+        '用料理夾夾住麵條在鍋內做快速順時針旋轉攪拌，讓鍋底油水融合變成<strong>濃稠奶白乳化醬汁</strong>，緊緊包裹每根長麵。',
+        '## 熄火封香',
+        '醬汁完美掛麵、鍋底沒有多餘水份時，立刻關火！',
+        '有<strong>松露橄欖油</strong>的話，熄火後均勻淋入 <strong>1–1.5湯匙</strong>；沒有跳過。撒上現磨<strong>黑胡椒</strong>。',
+        '利用鍋子殘溫快速翻拌 5 秒封香。用夾子將麵捲成山狀盛盤，把鍋底金黃蒜片和辣椒碎一口氣淋在頂端。',
+      ],
+      tips: [
+        '🧄 冷油冷蒜下鍋 — 蒜要跟著油溫一起升，熱油下蒜會瞬間燒焦變苦',
+        '💧 煮麵水就是醬汁 — 這杯水別倒掉，澱粉是乳化的靈魂',
+        '🍝 麵要提早撈 — 提早 1.5~2 分鐘撈起，進平底鍋還會繼續熟',
+        '🌡️ 松露怕熱 — 一定要關火後才加，加熱會讓香氣揮發殆盡',
+        '👁️ 乳化判斷 — 鍋底從清澈變成奶白濃稠就成功了',
+      ],
+      schedule: [
+        [0, '煮麵水開火、備蒜片辣椒碎'],
+        [10, '麵下鍋，同時平底鍋冷油冷蒜煸香'],
+        [18, '麵提早撈起，留煮麵水 200ml'],
+        [20, '大火乳化，瘋狂旋轉'],
+        [25, '關火封香，盛盤 ✅'],
+      ],
+    },
+    {
+      id: 4,
+      title: '香蕉胖胖瑪芬',
+      subtitle: '焦糖黑糖・喝的優格・氣炸版',
+      cuisine: '西式',
+      stars: 2,
+      starsLabel: '家常實力',
+      tags: ['甜點', '烘焙', '下午茶', '剩菜救援'],
+      basePortions: 4,
+      time: '約35分鐘',
+      shoppingList: [
+        ['熟透香蕉', 2, '根'],
+        ['低筋麵粉', 160, 'g'],
+        { label: '糖', note: '黑糖提焦糖香，白糖給甜度', items: [
+          ['黑糖', 25, 'g'],
+          ['白糖', 75, 'g'],
+        ]},
+        ['奶油', 75, 'g'],
+        ['喝的優格', 40, 'ml'],
+        ['蛋', 1, '顆'],
+        ['香草精', 0.5, '茶匙'],
+        ['小蘇打粉', 0.75, '茶匙'],
+      ],
+      steps: [
+        '## 備料',
+        '香蕉放碗裡用叉子壓成泥，越均勻越好。',
+        '<strong>奶油融化後放涼</strong>備用，不能趁熱加進蛋裡。',
+        '另一個碗混合<strong>低筋麵粉、小蘇打粉</strong>，備用。',
+        '## 混合',
+        '香蕉泥加入<strong>蛋、喝的優格、融化奶油、香草精、黑糖、白糖</strong>，攪拌均勻。',
+        '將乾料倒入濕料碗，用刮刀輕輕翻拌，<strong>看不到粉就停手</strong>。',
+        '用<strong>廚房紙巾沾奶油</strong>，均勻塗抹模具內側底部與四周，防沾。',
+        '麵糊平均倒入4個瑪芬模具，約<strong>八分滿</strong>。',
+        '## 氣炸',
+        '氣炸鍋 <strong>160°C 預熱3分鐘</strong>。',
+        '放入模具，<strong>160°C 烤22-25分鐘</strong>。',
+        '20分鐘開始用<strong>牙籤</strong>插入中心，拔出乾淨即完成。未熟追加 3 分鐘再測。',
+      ],
+      tips: [
+        '🍌 香蕉越黑越好 — 表皮全黑的香蕉甜度最高，壓泥最容易，這是蛋糕好吃的關鍵',
+        '🧈 奶油一定要放涼 — 太熱倒進去會把蛋煮熟，整鍋毀掉',
+        '🥄 不要過度攪拌 — 看不到粉就停，多攪一下就出筋變硬',
+        '🌡️ 160°C 別調高 — 氣炸火力集中，太高外皮焦裡面還生',
+        '🖤 黑色金屬模導熱快 — 比矽膠更容易上色，20分鐘就開始牙籤測試，寧可早查',
+        '🧁 八分滿就好 — 麵糊會膨脹，裝太滿溢出來很慘',
+      ],
+      schedule: [
+        [0, '香蕉壓泥、奶油融化放涼'],
+        [10, '混合濕料＋乾料，倒入模具'],
+        [13, '氣炸鍋預熱'],
+        [16, '放入模具，開始氣炸'],
+        [36, '牙籤測試，完成 ✅'],
+      ],
+    },
+    {
+      id: 5,
+      title: '咕嘟咕嘟辣醬鍋',
+      subtitle: '辣椒醬・豬五花・白飯殺手',
+      cuisine: '韓式',
+      stars: 2,
+      starsLabel: '家常實力',
+      tags: ['豬肉', '鍋物', '一鍋到底', '韓劇感', '想吃熱的'],
+      basePortions: 2,
+      time: '約40分鐘',
+      shoppingList: [
+        ['豬五花或梅花肉', 250, 'g'],
+        ['韓國櫛瓜', 0.5, '根'],
+        ['馬鈴薯', 1, '顆'],
+        ['板豆腐', 0.5, '盒'],
+        ['洋蔥', 0.5, '顆'],
+        ['大蔥', 0.5, '根'],
+        ['青陽辣椒', 1, '根'],
+        ['韓式辣椒醬', 2, '湯匙'],
+        ['韓國粗辣椒粉', 1, '湯匙'],
+        ['蒜末', 0.5, '湯匙'],
+        ['純釀造醬油', 1, '湯匙'],
+        ['白糖', 0.25, '湯匙'],
+        ['韓式醃蝦醬（可用少量魚露替代）', 0.5, '湯匙'],
+        ['醋', 0.5, '湯匙（關火前）'],
+      ],
+      steps: [
+        '## 備料',
+        '<strong>大碗調醬（最省事）</strong>：把 2 大匙辣椒醬、1 大匙辣椒粉、0.5 大匙蒜末、1 大匙純釀造醬油、0.5 大匙白糖，直接在小碗裡拌勻備用。',
+        '食材切好：肉和馬鈴薯切大塊，<strong>韓國櫛瓜</strong>切 1~2 公分厚塊（切厚一點才耐煮），洋蔥切大塊，豆腐切厚塊。大蔥斜切成段，青陽辣椒斜切片。',
+        '## 煸炒豬肉',
+        '湯鍋不放油，直接放入<strong>豬肉塊</strong>，中火（4-5）煸炒至表面金黃微焦，逼出亮晶晶的豬油。',
+        '## 炒醬底',
+        '轉小火（2-3），將調好的醬汁全部倒入鍋中，利用豬油翻炒約 1 分鐘，炒到醬汁冒泡、紅亮香氣完全激發。',
+        '## 燉煮',
+        '倒入<strong>500ml 清水</strong>，放入<strong>馬鈴薯塊</strong>，大火（7-8）煮滾，仔細撈除浮沫。',
+        '放入<strong>板豆腐塊</strong>，轉中小火（3-4），蓋鍋蓋燉煮 15 分鐘，馬鈴薯澱粉溶入湯中讓湯頭自然濃稠。',
+        '## 加入蔬菜',
+        '開蓋轉大火，用鏟子劃開鍋底確認稠度——夠稠就直接下<strong>韓國櫛瓜塊</strong>和<strong>洋蔥塊</strong>，煮 3~4 分鐘；不夠稠就多滾 3~5 分鐘再下。',
+        '放入<strong>大蔥段</strong>、<strong>青陽辣椒片</strong>，再滾 1~2 分鐘，關火！',
+        '## 收尾',
+        '加入<strong>韓式醃蝦醬 0.5湯匙</strong>攪拌均勻，試一下鹹淡，不夠鹹可再補一點。',
+        '關火前淋入<strong>醋 0.5湯匙</strong>，稍微攪拌，立刻關火！',
+      ],
+      tips: [
+        '🐷 不放油直接煸肉 — 豬肉本身的油脂才是這鍋的靈魂，加油反而膩',
+        '🥣 醬汁先拌好 — 備料時一次調好，下鍋只需倒入，省事又不會漏料',
+        '🌶️ 辣椒醬小火炒才香 — 火太大容易燒焦變苦，逼出香氣就好，1分鐘夠了',
+        '🥔 馬鈴薯自然勾芡 — 燉15分鐘澱粉溶入湯中，不需要另外勾芡',
+        '🫘 豆腐早放才入味 — 跟著馬鈴薯一起燉，充分吸飽湯汁',
+        '💧 開蓋先確認稠度 — 燉完 15 分鐘後用鏟子劃開鍋底，醬汁不流回來才夠稠，不夠就多滾幾分鐘再下菜',
+        '🧅 洋蔥跟節瓜一起下 — 確認夠稠後才放，只要 3~4 分鐘，大蔥最後才放香氣最足',
+        '🍶 醋最後才放 — 提早放酸味揮發光了，關火前才能切斷豬油膩感',
+      ],
+      schedule: [
+        [0, '調醬、切好所有食材'],
+        [10, '煸炒豬肉、倒醬炒香'],
+        [15, '加水+馬鈴薯，大火煮滾撈浮沫'],
+        [18, '放豆腐，蓋鍋蓋中小火燉 15 分鐘'],
+        [33, '開蓋確認稠度，下節瓜＋洋蔥，煮 3~4 分鐘'],
+        [37, '放大蔥、辣椒，滾 1~2 分鐘'],
+        [39, '收尾調味，上桌 ✅'],
+      ],
+    },
+    {
+      id: 6,
+      title: '櫛瓜小煎餅',
+      subtitle: '櫛瓜・蛋衣・爆汁',
+      cuisine: '韓式',
+      stars: 1,
+      starsLabel: '新手村',
+      tags: ['蔬菜', '小菜', '30分鐘上桌', '錢包友善'],
+      basePortions: 2,
+      time: '約20分鐘',
+      shoppingList: [
+        ['櫛瓜', 1, '根'],
+        ['雞蛋', 2, '顆'],
+        ['煎餅粉或中筋麵粉', 1.5, '湯匙'],
+        ['香油', null, '幾滴（蛋汁用）'],
+      ],
+      steps: [
+        '## 切片出水',
+        '<strong>櫛瓜</strong>切成 0.5-0.7cm 厚圓片，平鋪在盤上，兩面均勻撒少量<strong>鹽</strong>，靜置 5 分鐘。',
+        '表面出水後，用<strong>廚房紙巾徹底擦乾</strong>兩面。水分擦乾，粉才不會黏成糊。',
+        '## 撒薄粉',
+        '將<strong>煎餅粉</strong>均勻撒在櫛瓜片兩面，拿起在手心輕拍幾下，抖掉多餘的粉，只留淡淡霧白一層即可。',
+        '## 裹蛋下鍋',
+        '<strong>雞蛋</strong>加<strong>幾滴香油</strong>打散。櫛瓜片沾蛋汁，讓兩面完整裹上蛋液。',
+        '平底鍋下<strong>食用油 2湯匙</strong>，中小火（3-4）熱鍋，櫛瓜片一片片排入。',
+        '## 煎至金黃',
+        '中小火（3-4）煎第一面 2-3 分鐘，邊緣蛋皮轉金黃時翻面。',
+        '再煎約 2 分鐘，用筷子輕戳中心，感覺<strong>微軟帶彈性</strong>即可起鍋。',
+      ],
+      tips: [
+        '🧻 擦乾是命 — 出水沒擦乾，粉黏成糊，煎出來軟爛不爆汁',
+        '☁️ 粉要薄不要厚 — 拍掉多餘的粉，只要霧白一層，太厚口感像麵糊',
+        '🥚 先粉後蛋 — 順序不能反，粉在蛋汁下才能讓蛋液均勻附著',
+        '🍳 中小火慢煎（3-4）— 大火外皮焦內部沒熟，保持中小火才能爆汁',
+      ],
+      schedule: [
+        [0, '櫛瓜切片、撒鹽靜置 5 分鐘'],
+        [5, '擦乾水分、撒薄粉'],
+        [8, '打散蛋汁、裹片'],
+        [10, '熱鍋下油，開始煎'],
+        [18, '起鍋，上桌 ✅'],
+      ],
+    },
+    {
+      id: 7,
+      title: '一秒回羅馬番茄肉醬',
+      subtitle: '豬牛各半・Soffritto・紅酒',
+      cuisine: '義式',
+      stars: 3,
+      starsLabel: '深夜炫技',
+      time: '約2.5小時',
+      basePortions: 10,
+      note: '這道不是平日晚餐兩人份，而是「煮一大鍋、分裝冷凍、未來的自己會感謝你」的自製料理包版本。煮好後依食量分裝冷凍；之後懶得開火時，拿一包出來加熱拌麵，就會覺得以前的自己真棒！',
+      tags: ['豬肉', '麵', '週末慢慢煮', '隔夜更好吃'],
+      shoppingList: [
+        ['豬絞肉', 400, 'g'],
+        ['牛絞肉', 200, 'g'],
+        ['洋蔥', 1, '顆'],
+        ['胡蘿蔔', 1, '根'],
+        ['西洋芹', 2, '支'],
+        ['蘑菇', 6, '顆'],
+        ['紅酒', 180, 'ml'],
+        ['番茄義大利麵醬', 1200, 'g（Barilla 派在此小聲強推）'],
+      ],
+      steps: [
+        '## 備料',
+        '<strong>洋蔥、胡蘿蔔、西洋芹、蘑菇</strong>切小丁。',
+        '<strong>豬絞肉</strong>和<strong>牛絞肉</strong>先放在旁邊回溫 10 分鐘。',
+        '## 炒蔬菜底味',
+        '深鍋下少許油，放入<strong>洋蔥、胡蘿蔔、西洋芹、蘑菇</strong>，中火慢慢炒。',
+        '炒到蔬菜明顯縮水、洋蔥變透明，鍋裡聞起來有甜甜的蔬菜香。',
+        '## 炒肉末',
+        '加入<strong>豬絞肉</strong>和<strong>牛絞肉</strong>，用鍋鏟把肉末壓散，和蔬菜一起翻炒。',
+        '持續炒到肉末變色，水氣大量蒸發。',
+        '炒到鍋底不再濕答答，只剩下透明清澈的油脂，肉香也明顯跑出來。',
+        '## 紅酒收精華',
+        '倒入<strong>紅酒 180ml</strong>，轉中大火煮滾。',
+        '趁紅酒大滾時，用鍋鏟把鍋底焦香的精華刮起來。',
+        '繼續煮到酒精味散去、紅酒明顯收乾，只留下淡淡香氣。',
+        '## 番茄慢燉',
+        '倒入<strong>番茄義大利麵醬</strong>，和鍋裡的肉末、蔬菜攪拌均勻。',
+        '煮滾後轉極小火，蓋子留一點小縫，燉煮 1 小時。',
+        '中間每 10–15 分鐘攪拌一次，順便刮一下鍋底，避免肉醬偷偷黏鍋。',
+        '燉到醬汁變濃、肉末和蔬菜完全融合，表面浮出一點漂亮油光，就可以關火。',
+        '試味道，再用鹽調整鹹度。',
+      ],
+      tips: [
+        '🥩 豬牛各半是關鍵 — 豬油滋潤口感，牛肉帶深度，少一樣風味就差一截',
+        '🍷 紅酒一定要收乾 — 酒精味沒散去就加醬，最後會有奇怪的酸澀感',
+        '🔥 極小火才是靈魂 — 蓋子留縫、慢燉 1 小時，肉末和蔬菜才會完全融為一體',
+        '🍝 隔夜更猛 — 放一晚繼續沉澱，第二天的肉醬才是最巔峰狀態',
+      ],
+      schedule: [
+        [0, '備料、蔬菜切丁'],
+        [10, '下鍋炒蔬菜底味'],
+        [25, '加肉末，炒到水氣蒸發'],
+        [40, '倒紅酒，中大火收乾'],
+        [50, '倒番茄醬，煮滾'],
+        [55, '轉極小火，蓋縫燉煮（每 10 分鐘攪拌）'],
+        [115, '油光浮現，關火 ✅'],
+      ],
+    },
+    {
+      id: 8,
+      title: '大口吃肉泡菜鍋',
+      subtitle: '熟成泡菜・五花・昆布高湯',
+      cuisine: '韓式',
+      stars: 2,
+      starsLabel: '家常實力',
+      time: '約45分鐘',
+      basePortions: 2,
+      tags: ['豬肉', '鍋物', '一鍋到底', '韓劇感', '想吃熱的'],
+      shoppingList: [
+        ['熟成泡菜', 400, 'g（越酸越香）'],
+        ['豬五花肉', 200, 'g'],
+        ['板豆腐', 0.5, '盒'],
+        ['洋蔥', 0.25, '顆'],
+        ['大蔥', 1, '根'],
+        ['蒜末', 1, '湯匙'],
+        ['韓式辣椒粉', 1, '湯匙'],
+        ['韓式醃蝦醬（可用少量魚露替代）', 1, '茶匙'],
+        ['水／昆布魚乾高湯', 500, 'ml'],
+        ['韓式芝麻油（可用香油）', 1, '茶匙'],
+      ],
+      steps: [
+        '## 備料',
+        '<strong>泡菜</strong>剪成一口大小，泡菜汁留下備用。熟成泡菜就是酸一點的泡菜；超市泡菜買回來後，可密封放室溫半天～1 天，酸味出來就冰回去。',
+        '<strong>豬五花</strong>切成豪邁一點的塊狀。<strong>洋蔥</strong>切絲，<strong>大蔥</strong>斜切，<strong>豆腐</strong>切厚片。',
+        '## 先煎肉香',
+        '鍋中放入<strong>豬五花</strong>，中火煎到表面微微金黃、豬油香氣出來。',
+        '加入<strong>洋蔥</strong>和<strong>泡菜</strong>，拌炒 3–4 分鐘，炒到泡菜顏色變深、酸香味跑出來。',
+        '加入<strong>蒜末、韓式芝麻油、韓式辣椒粉</strong>，快速拌炒均勻。辣椒粉可依泡菜辣度調整，不用硬加到滿。',
+        '## 咕嘟咕嘟燉起來',
+        '倒入<strong>泡菜汁</strong>和<strong>昆布魚乾高湯</strong>，加入<strong>韓式醃蝦醬</strong>，攪拌均勻。',
+        '煮滾後轉中小火，蓋上鍋蓋燉煮 15–20 分鐘，讓豬肉、泡菜和湯底變成一家人。',
+        '放入<strong>豆腐</strong>，再煮 5 分鐘。豆腐放進去後不要一直翻，它真的很容易心碎。',
+        '## 最後調味',
+        '試味道。太酸可以加一點糖，不夠鹹再補鹽或少量魚露。',
+        '湯汁煮到微微變濃後，加入<strong>大蔥</strong>，再煮 1 分鐘即可關火。它是泡菜鍋，不是泡菜清湯，湯量不用太豪邁。',
+      ],
+      tips: [
+        '🥬 熟成泡菜才夠香 — 剛買的泡菜太清爽，密封放室溫半天讓它酸一點，整鍋湯底的靈魂才出來',
+        '🥩 豬五花先煎 — 把豬油逼出來再炒泡菜，香氣完全不一樣',
+        '🌶️ 辣椒粉快速拌炒即可 — 高溫久炒會讓辣椒粉焦掉變苦',
+        '🫘 豆腐輕放輕放 — 進鍋後盡量不翻動，心碎了很難看',
+      ],
+      schedule: [
+        [0, '備料：泡菜剪段、蔬菜切好'],
+        [10, '中火煎豬五花至金黃'],
+        [15, '下洋蔥、泡菜拌炒'],
+        [20, '下蒜末、辣椒粉、芝麻油'],
+        [22, '倒高湯和泡菜汁，大火煮滾'],
+        [25, '轉中小火，蓋鍋蓋燉煮'],
+        [43, '放豆腐，再煮 5 分鐘'],
+        [48, '加大蔥，關火 ✅'],
+      ],
+    },
+  ];
+
+  // ── 括號樣式 ──
+  function wrapParens(text) {
+    return text.replace(/[（(][^）)]*[）)]/g, m => `<span class="paren-note">${m}</span>`);
+  }
+
+  // ── 數量縮放 ──
+  // 格式：[name, number|null, unitString]
+  // number = null 代表「少許」等不縮放的
+
+  function scaleAmount(num, unit, factor) {
+    if (num === null) return unit; // 少許等
+    const scaled = num * factor;
+    // 格式化：避免過多小數位
+    const formatted = Number.isInteger(scaled)
+      ? scaled
+      : Math.round(scaled * 4) / 4; // 四捨五入到 0.25
+    // 去掉多餘的 .0
+    const display = formatted % 1 === 0 ? formatted : formatted;
+    return `${display}${unit}`;
+  }
+
+  function splitUnitNote(unitRaw) {
+    const i = unitRaw ? unitRaw.indexOf('（') : -1;
+    return i >= 0
+      ? { unit: unitRaw.slice(0, i).trim() || null, note: unitRaw.slice(i) }
+      : { unit: unitRaw || null, note: '' };
+  }
+
+  function renderShoppingList(list, factor) {
+    return list.map(item => {
+      if (Array.isArray(item)) {
+        const [name, num, unitRaw] = item;
+        const { unit, note } = splitUnitNote(unitRaw);
+        const nameHtml = wrapParens(name) + (note ? `<span class="paren-note">${note}</span>` : '');
+        return `<tr><td>${nameHtml}</td><td>${scaleAmount(num, unit, factor)}</td></tr>`;
+      } else {
+        const subRows = item.items.map(([n, num, unitRaw]) => {
+          const { unit, note } = splitUnitNote(unitRaw);
+          const nameHtml = wrapParens(n) + (note ? `<span class="paren-note">${note}</span>` : '');
+          return `<tr class="shopping-sub"><td>↳ ${nameHtml}</td><td>${scaleAmount(num, unit, factor)}</td></tr>`;
+        }).join('');
+        return `<tr class="shopping-group-header"><td colspan="2">${wrapParens(item.label)}${item.note ? `&nbsp;<span class="shopping-group-note">（${item.note}）</span>` : ''}</td></tr>${subRows}`;
+      }
+    }).join('');
+  }
+
+  // ── 當前開啟的食譜 ──
+  const defaultIds = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+  let currentRecipe = null;
+  let currentPortions = 2;
+  let cartIds = new Set();
+
+  function openDetail(id) {
+    const recipes = loadRecipes();
+    const r = recipes.find(x => x.id === id);
+    if (!r) return;
+    currentRecipe = r;
+    currentPortions = r.basePortions;
+
+    document.getElementById('d-title').textContent = r.title;
+    document.getElementById('d-tags').innerHTML =
+      (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
+    document.getElementById('d-time').textContent = r.time;
+    document.getElementById('d-portion-count').textContent = currentPortions;
+    const noteEl = document.getElementById('d-note');
+    if (r.note) { noteEl.textContent = r.note; noteEl.style.display = ''; }
+    else { noteEl.style.display = 'none'; }
+
+    renderScaled();
+
+    let stepCounter = 0;
+    document.getElementById('d-steps').innerHTML = r.steps.map(s => {
+      if (s.startsWith('##')) {
+        return `<div class="steps-phase">${s.slice(2).trim()}</div>`;
+      }
+      stepCounter++;
+      return `<li><span class="step-num">${stepCounter}</span><span>${wrapParens(s)}</span></li>`;
+    }).join('');
+
+    const tipsSection = document.getElementById('d-tips-section');
+    if (r.tips && r.tips.length) {
+      document.getElementById('d-tips').innerHTML =
+        r.tips.map(t => `<li>${wrapParens(t)}</li>`).join('');
+      tipsSection.style.display = '';
+    } else {
+      tipsSection.style.display = 'none';
+    }
+
+    const schedSection = document.getElementById('d-schedule-section');
+    if (r.schedule && r.schedule.length) {
+      schedSection.style.display = '';
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = (Math.round(now.getMinutes() / 5) * 5 % 60).toString().padStart(2, '0');
+      document.getElementById('d-start-time').value = `${h}:${m}`;
+      recalcSchedule();
+    } else {
+      schedSection.style.display = 'none';
+    }
+
+    updateDetailCartBtn();
+    document.getElementById('d-actions').style.display = defaultIds.has(r.id) ? 'none' : '';
+    const authorEl = document.getElementById('d-author');
+    if (r.author) { authorEl.textContent = '上菜人 · ' + r.author; authorEl.style.display = ''; }
+    else { authorEl.style.display = 'none'; }
+    document.getElementById('detailModal').classList.add('active');
+  }
+
+  function renderScaled() {
+    if (!currentRecipe) return;
+    const factor = currentPortions / currentRecipe.basePortions;
+    document.getElementById('d-shopping').innerHTML =
+      renderShoppingList(currentRecipe.shoppingList, factor);
+  }
+
+  function changePortion(delta) {
+    if (!currentRecipe) return;
+    const next = currentPortions + delta;
+    if (next < 1 || next > 10) return;
+    currentPortions = next;
+    document.getElementById('d-portion-count').textContent = currentPortions;
+    renderScaled();
+  }
+
+  function recalcSchedule() {
+    if (!currentRecipe || !currentRecipe.schedule) return;
+    const val = document.getElementById('d-start-time').value;
+    if (!val) return;
+    const [sh, sm] = val.split(':').map(Number);
+    const startMins = sh * 60 + sm;
+    document.getElementById('d-schedule').innerHTML =
+      currentRecipe.schedule.map(([offset, desc]) => {
+        const total = startMins + Number(offset);
+        const hh = Math.floor(total / 60) % 24;
+        const mm = (total % 60).toString().padStart(2, '0');
+        return `<li><span class="schedule-time">${hh}:${mm}</span><span>${wrapParens(desc)}</span></li>`;
+      }).join('');
+  }
+
+  // ── localStorage ──
+  function loadRecipes() {
+    if (localStorage.getItem(VERSION_KEY) !== DATA_VERSION) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultRecipes));
+      localStorage.setItem(VERSION_KEY, DATA_VERSION);
+      return defaultRecipes;
+    }
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) return JSON.parse(stored);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultRecipes));
+    return defaultRecipes;
+  }
+
+  function saveRecipes(recipes) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes));
+  }
+
+  // ── 渲染食譜列表 ──
+  function renderRecipes() {
+    const recipes = loadRecipes();
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const cuisine = document.getElementById('cuisineFilter').value;
+
+    const filtered = recipes.filter(r => {
+      const text = [r.title, r.subtitle, r.cuisine, ...(r.tags || [])].join(' ').toLowerCase();
+      return (!search || text.includes(search)) &&
+             (!cuisine || r.cuisine === cuisine);
+    });
+
+
+    const grid = document.getElementById('recipeGrid');
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+        <h3>找不到符合的食譜</h3><p>換個關鍵字，或新增一份食譜吧</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(r => `
+      <div class="recipe-card" onclick="openDetail(${r.id})">
+        <button class="cart-btn ${cartIds.has(r.id) ? 'active' : ''}" data-id="${r.id}"
+          onclick="event.stopPropagation(); toggleCart(${r.id})"
+          title="加入購物清單">${cartIds.has(r.id) ? '✓' : '+'}</button>
+        <div class="card-header">
+          <div class="card-title">${r.title}</div>
+          <div class="card-tags" style="margin-top:12px;">
+            ${r.cuisine ? `<span class="tag cuisine">${r.cuisine}</span>` : ''}
+            ${(r.tags || []).filter(t => t !== r.cuisine).map(t => `<span class="tag-dark">${t}</span>`).join('')}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="meta-label">時間</span>
+              <span class="meta-value">${r.time}</span>
+            </div>
+            <div class="meta-item" style="text-align:right">
+              <span class="meta-label">蝸居評鑑</span>
+              <span class="meta-value">${'⭐'.repeat(r.stars || 1)} ${r.starsLabel || ''}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── Modal ──
+  function addStepPhase(title) {
+    const container = document.getElementById('steps-container');
+    const block = document.createElement('div');
+    block.className = 'step-phase-block';
+    block.innerHTML =
+      '<div class="step-phase-header">' +
+        '<input class="step-phase-title form-input" type="text" placeholder="例：備料、炒香、燉煮、最後調味" />' +
+        '<button type="button" class="step-phase-remove" onclick="removeStepPhase(this)">×</button>' +
+      '</div>' +
+      '<textarea class="form-textarea step-phase-steps" placeholder="泡菜剪成一口大小，泡菜汁留下備用。&#10;豬五花切得豪邁一點，不要切肉片。"></textarea>';
+    if (title) block.querySelector('.step-phase-title').value = title;
+    container.appendChild(block);
+    block.querySelector('.step-phase-title').focus();
+  }
+
+  function removeStepPhase(btn) {
+    btn.closest('.step-phase-block').remove();
+  }
+
+  function addCustomTag() {
+    const input = document.getElementById('f-custom-tag');
+    const val = input.value.trim();
+    if (!val) return;
+    const container = document.getElementById('custom-tags-container');
+    if (container.querySelector(`input[value="${CSS.escape(val)}"]`)) { input.value = ''; return; }
+    const label = document.createElement('label');
+    label.className = 'tag-check tag-check-custom';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.name = 'ftag'; cb.value = val; cb.checked = true;
+    const del = document.createElement('span');
+    del.className = 'tag-check-del';
+    del.textContent = '×';
+    del.onclick = (e) => { e.preventDefault(); e.stopPropagation(); label.remove(); };
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(val));
+    label.appendChild(del);
+    container.appendChild(label);
+    input.value = '';
+    input.focus();
+  }
+
+  function openAddModal() {
+    ['f-title','f-author','f-ingredients','f-tips','f-schedule'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('f-portions').value = '2';
+    document.getElementById('f-time').value = '約40分鐘';
+    document.querySelectorAll('input[name="ftag"]').forEach(cb => { cb.checked = false; });
+    document.getElementById('custom-tags-container').innerHTML = '';
+    document.getElementById('f-custom-tag').value = '';
+    document.getElementById('steps-container').innerHTML = '';
+    addStepPhase('');
+    document.getElementById('addModal').classList.add('active');
+  }
+
+  let previewMode = false;
+  let editingRecipeId = null;
+
+  function exitPreviewMode() {
+    previewMode = false;
+    document.getElementById('detailModal').style.zIndex = '';
+    document.getElementById('preview-banner').style.display = 'none';
+    document.getElementById('d-cart-btn').style.display = '';
+    document.getElementById('detail-modal-close').style.display = '';
+    document.getElementById('d-actions').style.display = '';
+  }
+
+  function publishRecipe() {
+    exitPreviewMode();
+    closeModal('detailModal');
+    saveRecipe();
+  }
+
+  function deleteRecipe(id) {
+    if (!id || !confirm('確定要刪除這道食譜嗎？')) return;
+    saveRecipes(loadRecipes().filter(r => r.id !== id));
+    closeModal('detailModal');
+    renderRecipes();
+  }
+
+  function openEditModal(id) {
+    if (!id) return;
+    const r = loadRecipes().find(x => x.id === id);
+    if (!r) return;
+    editingRecipeId = id;
+    closeModal('detailModal');
+
+    document.getElementById('f-title').value = r.title || '';
+    document.getElementById('f-author').value = r.author || '';
+    const cuisineEl = document.getElementById('f-cuisine');
+    cuisineEl.value = r.cuisine || '台式';
+
+    document.getElementById('f-portions').value = r.basePortions || 2;
+    const timeEl = document.getElementById('f-time');
+    timeEl.value = [...timeEl.options].some(o => o.value === r.time) ? r.time : '約40分鐘';
+
+    const standardVals = new Set([...document.querySelectorAll('input[name="ftag"]')].map(cb => cb.value));
+    document.querySelectorAll('input[name="ftag"]').forEach(cb => { cb.checked = (r.tags || []).includes(cb.value); });
+    const container = document.getElementById('custom-tags-container');
+    container.innerHTML = '';
+    (r.tags || []).filter(t => !standardVals.has(t)).forEach(t => {
+      const label = document.createElement('label');
+      label.className = 'tag-check tag-check-custom';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.name = 'ftag'; cb.value = t; cb.checked = true;
+      const del = document.createElement('span');
+      del.className = 'tag-check-del'; del.textContent = '×';
+      del.onclick = (e) => { e.preventDefault(); e.stopPropagation(); label.remove(); };
+      label.appendChild(cb); label.appendChild(document.createTextNode(t)); label.appendChild(del);
+      container.appendChild(label);
+    });
+    document.getElementById('f-custom-tag').value = '';
+
+    const ingredientText = (r.shoppingList || r.ingredients || []).map(item => {
+      if (Array.isArray(item)) {
+        const [name, amount, unit] = item;
+        return amount !== null ? `${name}｜${amount}${unit || ''}` : `${name}｜${unit || ''}`;
+      }
+      return item.label || '';
+    }).join('\n');
+    document.getElementById('f-ingredients').value = ingredientText;
+
+    document.getElementById('steps-container').innerHTML = '';
+    let currentTitle = null, currentLines = [];
+    const flush = () => {
+      if (currentTitle !== null || currentLines.length) {
+        addStepPhase(currentTitle || '');
+        const blocks = document.querySelectorAll('.step-phase-block');
+        blocks[blocks.length - 1].querySelector('.step-phase-steps').value = currentLines.join('\n');
+        currentTitle = null; currentLines = [];
+      }
+    };
+    (r.steps || []).forEach(s => {
+      if (s.startsWith('##')) { flush(); currentTitle = s.slice(2).trim(); }
+      else { currentLines.push(s); }
+    });
+    flush();
+    if (!document.querySelector('.step-phase-block')) addStepPhase('');
+
+    document.getElementById('f-tips').value = (r.tips || []).join('\n');
+    document.getElementById('f-schedule').value = (r.schedule || []).map(([m, d]) => `${m}｜${d}`).join('\n');
+
+    document.getElementById('addModal-title').textContent = '編輯食譜';
+    document.getElementById('addModal').classList.add('active');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    if (id === 'detailModal' && previewMode) exitPreviewMode();
+    if (id === 'addModal' && editingRecipeId !== null) {
+      editingRecipeId = null;
+      document.getElementById('addModal-title').textContent = '新增食譜';
+    }
+  }
+
+  function closeDetailIfOutside(e) {
+    if (e.target.classList.contains('modal-overlay')) {
+      e.target.classList.remove('active');
+      if (e.target.id === 'detailModal' && previewMode) exitPreviewMode();
+      if (e.target.id === 'addModal' && editingRecipeId !== null) {
+        editingRecipeId = null;
+        document.getElementById('addModal-title').textContent = '新增食譜';
+      }
+    }
+  }
+
+  // ── 購物清單功能 ──
+  function toggleCartFromDetail() {
+    if (!currentRecipe) return;
+    toggleCart(currentRecipe.id);
+    updateDetailCartBtn();
+  }
+
+  function updateDetailCartBtn() {
+    if (!currentRecipe) return;
+    const btn = document.getElementById('d-cart-btn');
+    const inCart = cartIds.has(currentRecipe.id);
+    btn.textContent = inCart ? '✓ 已加入清單' : '🛒 加入購物清單';
+    btn.classList.toggle('active', inCart);
+  }
+
+  function toggleCart(id) {
+    if (cartIds.has(id)) { cartIds.delete(id); } else { cartIds.add(id); }
+    document.querySelectorAll('.cart-btn[data-id]').forEach(btn => {
+      const active = cartIds.has(parseInt(btn.dataset.id));
+      btn.classList.toggle('active', active);
+      btn.textContent = active ? '✓' : '+';
+    });
+    renderCartPanel();
+  }
+
+  function renderCartPanel() {
+    const recipes = loadRecipes();
+    const area = document.getElementById('cart-cards-area');
+    const goBtn = document.getElementById('cart-go-btn');
+    if (cartIds.size === 0) {
+      area.innerHTML = '<span class="cart-empty-hint">點 ＋ 加入食譜</span>';
+      goBtn.disabled = true;
+    } else {
+      area.innerHTML = [...cartIds].map(id => {
+        const r = recipes.find(r => r.id === id);
+        if (!r) return '';
+        return `<div class="cart-mini-card">
+          <span>${r.title}</span>
+          <button class="cart-mini-remove" onclick="toggleCart(${id})" title="移除">×</button>
+        </div>`;
+      }).join('');
+      goBtn.disabled = false;
+    }
+  }
+
+  function openCartModal() {
+    const recipes = loadRecipes();
+    const selected = recipes.filter(r => cartIds.has(r.id));
+    if (!selected.length) return;
+
+    const meatMap = {}, vegMap = {}, chillMap = {}, grocMap = {}, seasonMap = {};
+    const nullMeat = new Map(), nullVeg = new Map(), nullChill = new Map(), nullGroc = new Map(), nullSeason = new Map();
+
+    function getFreshCat(name) {
+      const meatWords = ['雞', '棒棒腿', '豬', '牛', '양지', '肉', '魚', '蝦', '鴨', '羊'];
+      const vegWords = ['蘿蔔', '洋蔥', '大蔥', '蔥', '辣椒', '蒜', '瓜', '薯', '栗', '밤', '乾海帶', '香蕉', '大蒜', '菇', '菜', '韭', '番茄', '青椒', '高麗', '豆'];
+      const chillWords = ['蛋', '奶油', '優格', '牛奶', '起司', '乳酪', '鮮奶油'];
+      if (meatWords.some(k => name.includes(k))) return 'meat';
+      if (vegWords.some(k => name.includes(k))) return 'veg';
+      if (chillWords.some(k => name.includes(k))) return 'chill';
+      return 'groc';
+    }
+
+    function mergeItem(map, nullMap, name, num, unit) {
+      const baseUnit = unit.replace(/（[^）]*）/g, '').replace(/\([^)]*\)/g, '').trim();
+      if (num === null) { if (!nullMap.has(name)) nullMap.set(name, baseUnit || unit); return; }
+      const key = `${name}||${baseUnit}`;
+      if (map[key]) map[key].num += num;
+      else map[key] = { name, num, unit: baseUnit };
+    }
+
+    selected.forEach(r => {
+      (r.shoppingList || []).forEach(item => {
+        if (Array.isArray(item)) {
+          const [name, num, unit] = item;
+          if (name === '水') return;
+          if (name.includes('鹽') || name.includes('酒') || name.includes('香草精')) { mergeItem(seasonMap, nullSeason, name, num, unit); return; }
+          const cat = getFreshCat(name);
+          if (cat === 'meat') mergeItem(meatMap, nullMeat, name, num, unit);
+          else if (cat === 'veg') mergeItem(vegMap, nullVeg, name, num, unit);
+          else if (cat === 'chill') mergeItem(chillMap, nullChill, name, num, unit);
+          else mergeItem(grocMap, nullGroc, name, num, unit);
+        } else {
+          item.items.forEach(([name, num, unit]) => {
+            if (name === '水') return;
+            mergeItem(seasonMap, nullSeason, name, num, unit);
+          });
+        }
+      });
+    });
+
+    const makeRows = (map, nullMap) => {
+      const r = Object.values(map).map(({ name, num, unit }) => {
+        const fmt = Number.isInteger(num) ? num : parseFloat(num.toFixed(2));
+        return `<tr><td>${name}</td><td>${fmt}${unit ? ' ' + unit : ''}</td></tr>`;
+      }).join('');
+      const n = [...nullMap.entries()].map(([nm, u]) =>
+        `<tr><td>${nm}</td><td>${u}</td></tr>`).join('');
+      return r + n;
+    };
+
+    const sec = (label) =>
+      `<tr><td colspan="2" style="padding:12px 12px 4px;font-size:11px;letter-spacing:2px;color:var(--placeholder);background:var(--brand-light);border-bottom:1px solid var(--line);text-transform:uppercase;">${label}</td></tr>`;
+
+    let html = '';
+    const mr = makeRows(meatMap, nullMeat);
+    const vr = makeRows(vegMap, nullVeg);
+    const cr = makeRows(chillMap, nullChill);
+    const gr = makeRows(grocMap, nullGroc);
+    const sr = makeRows(seasonMap, nullSeason);
+    if (mr) html += sec('🥩 肉類海鮮') + mr;
+    if (vr) html += sec('🥬 蔬菜水果') + vr;
+    if (cr) html += sec('🥛 冷藏') + cr;
+    if (gr) html += sec('🛒 雜貨') + gr;
+    if (sr) html += sec('🧂 調味料') + sr;
+
+    document.getElementById('cart-modal-recipes').innerHTML =
+      selected.map(r => `<span class="tag-dark">${r.title}</span>`).join('');
+    document.getElementById('cart-modal-table').innerHTML = html;
+    document.getElementById('cartModal').classList.add('active');
+  }
+
+  // ── 新增食譜（新格式：用字串存，不支援自動縮放，但方便手動輸入）──
+  function parseLines(text) {
+    return text.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+      const parts = l.split('|').map(p => p.trim());
+      const name = parts[0] || '';
+      const amtStr = parts[1] || '';
+      // 嘗試解析前導數字
+      const match = amtStr.match(/^(\d+\.?\d*)\s*(.*)/);
+      if (match) return [name, parseFloat(match[1]), match[2] || ''];
+      return [name, null, amtStr];
+    });
+  }
+
+  function buildRecipeFromForm() {
+    const steps = [];
+    document.querySelectorAll('.step-phase-block').forEach(block => {
+      const phaseTitle = block.querySelector('.step-phase-title').value.trim();
+      const lines = block.querySelector('.step-phase-steps').value.split('\n').map(l => l.trim()).filter(Boolean);
+      if (phaseTitle) steps.push('## ' + phaseTitle);
+      steps.push(...lines);
+    });
+    const author = document.getElementById('f-author').value.trim();
+    return {
+      title: document.getElementById('f-title').value.trim() || '（未命名）',
+      ...(author && { author }),
+      cuisine: document.getElementById('f-cuisine').value,
+      basePortions: parseInt(document.getElementById('f-portions').value) || 2,
+      time: document.getElementById('f-time').value,
+      tags: [...document.querySelectorAll('input[name="ftag"]:checked')].map(cb => cb.value),
+      shoppingList: parseLines(document.getElementById('f-ingredients').value),
+      steps,
+      tips: document.getElementById('f-tips').value.split('\n').map(l => l.trim()).filter(Boolean),
+      schedule: document.getElementById('f-schedule').value.split('\n').map(l => l.trim()).filter(Boolean)
+        .map(l => { const p = l.split('|').map(x => x.trim()); return [Number(p[0]) || 0, p[1] || '']; }),
+    };
+  }
+
+  function previewRecipe() {
+    const titleVal = document.getElementById('f-title').value.trim();
+    const authorVal = document.getElementById('f-author').value.trim();
+    if (!titleVal) { alert('請填寫食譜名稱！'); document.getElementById('f-title').focus(); return; }
+    if (!authorVal) { alert('請填寫上菜人！'); document.getElementById('f-author').focus(); return; }
+    const r = buildRecipeFromForm();
+    currentRecipe = r;
+    currentPortions = r.basePortions;
+
+    document.getElementById('d-title').textContent = r.title;
+    document.getElementById('d-tags').innerHTML = (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
+    document.getElementById('d-time').textContent = r.time;
+    document.getElementById('d-portion-count').textContent = currentPortions;
+    document.getElementById('d-note').style.display = 'none';
+    const authorEl = document.getElementById('d-author');
+    const previewAuthor = document.getElementById('f-author').value.trim();
+    if (previewAuthor) { authorEl.textContent = '上菜人 · ' + previewAuthor; authorEl.style.display = ''; }
+    else { authorEl.style.display = 'none'; }
+    renderScaled();
+
+    let stepCounter = 0;
+    document.getElementById('d-steps').innerHTML = (r.steps || []).map(s => {
+      if (s.startsWith('##')) return `<div class="steps-phase">${s.slice(2).trim()}</div>`;
+      stepCounter++;
+      return `<li><span class="step-num">${stepCounter}</span><span>${wrapParens(s)}</span></li>`;
+    }).join('');
+
+    const tipsSection = document.getElementById('d-tips-section');
+    if (r.tips && r.tips.length) {
+      document.getElementById('d-tips').innerHTML = r.tips.map(t => `<li>${wrapParens(t)}</li>`).join('');
+      tipsSection.style.display = '';
+    } else { tipsSection.style.display = 'none'; }
+
+    const schedSection = document.getElementById('d-schedule-section');
+    if (r.schedule && r.schedule.length) {
+      schedSection.style.display = '';
+      const now = new Date();
+      document.getElementById('d-start-time').value =
+        `${now.getHours().toString().padStart(2,'0')}:${(Math.round(now.getMinutes()/5)*5%60).toString().padStart(2,'0')}`;
+      recalcSchedule();
+    } else { schedSection.style.display = 'none'; }
+
+    previewMode = true;
+    document.getElementById('detailModal').style.zIndex = '201';
+    document.getElementById('preview-banner').style.display = 'flex';
+    document.getElementById('d-cart-btn').style.display = 'none';
+    document.getElementById('detail-modal-close').style.display = 'none';
+    document.getElementById('d-actions').style.display = 'none';
+    document.getElementById('detailModal').classList.add('active');
+  }
+
+  function saveRecipe() {
+    const r = buildRecipeFromForm();
+    if (!r.title || r.title === '（未命名）') { alert('請輸入食譜名稱'); return; }
+    const recipes = loadRecipes();
+    if (editingRecipeId !== null) {
+      const idx = recipes.findIndex(x => x.id === editingRecipeId);
+      r.id = editingRecipeId;
+      if (idx !== -1) recipes[idx] = r; else recipes.push(r);
+      editingRecipeId = null;
+    } else {
+      r.id = recipes.length ? Math.max(...recipes.map(x => x.id)) + 1 : 1;
+      recipes.push(r);
+    }
+    saveRecipes(recipes);
+    document.getElementById('addModal-title').textContent = '新增食譜';
+    closeModal('addModal');
+    renderRecipes();
+  }
+
+  renderRecipes();
+</script>
+</body>
+</html>
