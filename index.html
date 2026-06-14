@@ -631,13 +631,16 @@
 
     @media (max-width: 600px) {
       header { padding: 16px 20px; }
+      .logo-main { font-size: 26px; letter-spacing: 2px; }
+      .logo-sub { font-size: 10px; letter-spacing: 1px; white-space: nowrap; }
+      .btn-add { white-space: nowrap; font-size: 13px; padding: 8px 14px; }
       .search-bar { padding: 0 20px 16px; flex-direction: column; }
       .container { padding: 24px 20px; }
       .modal-body { padding: 24px 20px; }
       .modal-header { padding: 24px 20px; }
       .modal-meta { flex-wrap: wrap; gap: 16px; }
       .form-row { grid-template-columns: 1fr; }
-      .recipe-grid { grid-template-columns: 1fr; }
+      .recipe-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
       .main-layout { flex-direction: column; }
       #cart-sidebar {
         width: 100%; border-left: none; padding-left: 0;
