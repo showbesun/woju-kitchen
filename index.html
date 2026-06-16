@@ -574,12 +574,13 @@
       border-left: 1px solid var(--line); padding-left: 28px;
       position: sticky; top: 88px; align-self: flex-start;
     }
-    /* ── 桌機版女孩：sidebar normal flow ── */
+    /* ── 桌機版女孩：固定尺寸，緊接「今天吃什麼？」之下 ── */
     .chef-girl {
       display: block;
-      width: 100%;        /* 填滿 sidebar 內容寬度，高度等比例自動 */
+      width: 250px;       /* 固定寬度，不跟 viewport 縮放 */
+      max-width: 100%;    /* 防止在窄 sidebar 溢出 */
       height: auto;
-      margin-top: 16px;
+      margin-top: 4px;
       pointer-events: none;
       user-select: none;
     }
@@ -779,11 +780,11 @@
         </div>
         <img src="chef_girl_flipped.png" class="mascot-img-mobile" alt="" aria-hidden="true" />
       </div>
+      <img src="chef_girl_flipped.png" class="chef-girl" alt="" aria-hidden="true" />
       <div id="cart-cards-area">
         <span class="cart-empty-hint">點 ＋ 加入食譜</span>
       </div>
       <button class="btn-cart-go" id="cart-go-btn" onclick="openCartModal()" disabled>衝去買菜</button>
-      <img src="chef_girl_flipped.png" class="chef-girl" alt="" aria-hidden="true" />
     </aside>
   </div>
 </div>
