@@ -566,23 +566,20 @@
 
     .main-layout {
       display: flex; align-items: flex-start; gap: 32px;
-      padding-right: 0;
     }
     .recipe-section { flex: 1; min-width: 0; }
     #cart-sidebar {
-      width: 168px; flex-shrink: 0;
+      width: 280px; flex-shrink: 0;
       display: flex; flex-direction: column; gap: 14px;
-      border-left: 1px solid var(--line); padding-left: 24px;
+      border-left: 1px solid var(--line); padding-left: 28px;
       position: sticky; top: 88px; align-self: flex-start;
     }
+    /* ── 桌機版女孩：sidebar normal flow ── */
     .chef-girl {
-      position: fixed;
-      right: 0;
-      bottom: 0;
-      height: 380px;
-      max-width: 170px;
-      width: auto;
-      z-index: 0;
+      display: block;
+      width: 100%;        /* 填滿 sidebar 內容寬度，高度等比例自動 */
+      height: auto;
+      margin-top: 16px;
       pointer-events: none;
       user-select: none;
     }
@@ -630,9 +627,17 @@
       margin-bottom: 4px; margin-top: 8px;
     }
 
-    /* ── 吉祥物 CTA 元件（預設隱藏，手機 / 平板顯示）── */
+    /* ── 吉祥物 CTA 元件 ── */
     .mascot-img-mobile { display: none; }
-    .cta-hint { display: none; }
+    /* cta-hint 桌機也顯示，作為 sidebar 的提示文字 */
+    .cta-hint {
+      display: block;
+      font-size: 11px;
+      color: var(--placeholder);
+      margin-top: 4px;
+      line-height: 1.5;
+      letter-spacing: 0.3px;
+    }
     /* cart-sidebar-top 在桌機上只是普通 block wrapper */
     .cart-sidebar-top { display: block; }
 
@@ -725,11 +730,11 @@
       .add-recipe-footer { display: flex; }
     }
 
-    /* ── 平板：chef-girl 縮小 ── */
+    /* ── 平板：版型微調 ── */
     @media (max-width: 900px) and (min-width: 769px) {
-      .chef-girl { height: 260px; }
       .container { padding: 32px 28px; }
-      .main-layout { gap: 24px; }
+      .main-layout { gap: 20px; }
+      #cart-sidebar { width: 240px; padding-left: 20px; }
     }
   </style>
 </head>
@@ -778,11 +783,10 @@
         <span class="cart-empty-hint">點 ＋ 加入食譜</span>
       </div>
       <button class="btn-cart-go" id="cart-go-btn" onclick="openCartModal()" disabled>衝去買菜</button>
+      <img src="chef_girl_flipped.png" class="chef-girl" alt="" aria-hidden="true" />
     </aside>
   </div>
 </div>
-
-<img src="chef_girl_flipped.png" class="chef-girl" alt="" />
 
 <!-- Recipe Detail Modal -->
 <div class="modal-overlay" id="detailModal" onclick="closeDetailIfOutside(event)">
