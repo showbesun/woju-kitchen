@@ -954,19 +954,18 @@
 
     /* 開始跟煮按鈕（在詳情頁） */
     .btn-start-cook {
-      display: block;
-      width: 100%;
-      margin-top: 18px;
-      padding: 14px 0;
+      flex-shrink: 0;
+      padding: 5px 14px;
       background: var(--brand);
       color: #fff;
       border: none;
-      border-radius: var(--radius-md);
-      font-size: 15px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
       font-weight: 700;
       font-family: 'Noto Sans TC', sans-serif;
       cursor: pointer;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
       transition: background 0.15s;
     }
     .btn-start-cook:hover { background: var(--brand-dark); }
@@ -1079,9 +1078,11 @@
       </div>
 
       <div class="modal-section">
-        <div class="modal-section-title">🍳 實戰步驟</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:0;">
+          <div class="modal-section-title" style="margin-bottom:0;">🍳 實戰步驟</div>
+          <button class="btn-start-cook" id="btn-start-cook" onclick="openCookMode()" style="display:none;">▶ 開始跟煮</button>
+        </div>
         <ol class="steps-list" id="d-steps"></ol>
-        <button class="btn-start-cook" id="btn-start-cook" onclick="openCookMode()" style="display:none;">開始跟煮</button>
       </div>
 
       <div class="modal-section" id="d-tips-section">
