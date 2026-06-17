@@ -1312,7 +1312,7 @@
   <button class="cook-arrow cook-arrow-left" id="cm-prev" onclick="cookPrev()">←</button>
   <button class="cook-arrow cook-arrow-right" id="cm-next" onclick="cookNext()">→</button>
   <div class="cook-finish-bar" id="cm-finish" style="display:none">
-    <button class="cook-finish-btn" onclick="cookFinish()">完成，上菜！</button>
+    <button class="cook-finish-btn" onclick="cookFinish()">我煮好了！ →</button>
   </div>
 </div>
 
@@ -2530,6 +2530,13 @@
   }
 
   function cookPrev() {
+    const done = document.getElementById('cm-done');
+    if (done.classList.contains('active')) {
+      done.classList.remove('active');
+      document.getElementById('cm-page').style.display = '';
+      cookRender();
+      return;
+    }
     if (cookPhaseIndex > 0) { cookPhaseIndex--; cookRender(); }
   }
 
@@ -2539,10 +2546,10 @@
 
   function cookFinish() {
     document.getElementById('cm-page').style.display = 'none';
-    document.getElementById('cm-prev').hidden = true;
     document.getElementById('cm-next').hidden = true;
     document.getElementById('cm-finish').style.display = 'none';
     document.getElementById('cm-done').classList.add('active');
+    document.getElementById('cm-prev').hidden = false;
   }
 
   document.addEventListener('keydown', function(e) {
