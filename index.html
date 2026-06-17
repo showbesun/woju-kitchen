@@ -812,11 +812,7 @@
       -webkit-overflow-scrolling: touch;
     }
     .cook-page-inner {
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 32px 0;
+      padding: 36px 0 80px;
     }
 
     .cook-phase-name {
@@ -891,20 +887,27 @@
     .cook-arrow-right { right: max(12px, calc(50% - 598px)); }
     .cook-arrow[hidden] { display: none; }
 
-    /* 最後一頁「我煮好了！」pill */
-    .cook-arrow.cook-nav-done {
-      width: auto;
-      padding: 0 18px;
+    /* 最後一頁「我煮好了！」— 內嵌在步驟列表下方 */
+    .cook-finish-inline {
+      display: none;
+      justify-content: flex-end;
+      margin-top: 40px;
+    }
+    .cook-finish-inline-btn {
+      background: none;
+      border: 1.5px solid var(--brand);
       border-radius: var(--radius-pill);
-      font-size: 13px;
+      color: var(--brand);
+      padding: 8px 22px;
+      font-size: 14px;
       font-weight: 700;
       font-family: 'Noto Sans TC', sans-serif;
-      background: var(--brand);
-      color: #fff;
-      border-color: var(--brand);
+      cursor: pointer;
       letter-spacing: 0.5px;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
     }
-    .cook-arrow.cook-nav-done:hover { background: var(--brand-dark); }
+    .cook-finish-inline-btn:hover { background: var(--brand); color: #fff; }
 
     /* 完成，上菜！按鈕（最後一頁） */
     .cook-finish-bar {
@@ -1322,6 +1325,9 @@
         <div class="cook-phase-name" id="cm-phase"></div>
         <div class="cook-phase-progress" id="cm-progress"></div>
         <ol class="cook-steps-list" id="cm-steps-list"></ol>
+        <div class="cook-finish-inline" id="cm-finish-inline">
+          <button class="cook-finish-inline-btn" onclick="cookFinish()">我煮好了！ →</button>
+        </div>
       </div>
     </div>
 
@@ -1334,9 +1340,6 @@
 
   <button class="cook-arrow cook-arrow-left" id="cm-prev" onclick="cookPrev()">←</button>
   <button class="cook-arrow cook-arrow-right" id="cm-next" onclick="cookNext()">→</button>
-  <div class="cook-finish-bar" id="cm-finish" style="display:none">
-    <button class="cook-finish-btn" onclick="cookFinish()">我煮好了！ →</button>
-  </div>
 </div>
 
 <script>
@@ -2548,15 +2551,8 @@
     document.getElementById('cm-page').scrollTop = 0;
 
     document.getElementById('cm-prev').hidden = isFirst;
-    const nextBtn = document.getElementById('cm-next');
-    nextBtn.hidden = false;
-    if (isLast) {
-      nextBtn.textContent = '我煮好了！';
-      nextBtn.classList.add('cook-nav-done');
-    } else {
-      nextBtn.textContent = '→';
-      nextBtn.classList.remove('cook-nav-done');
-    }
+    document.getElementById('cm-next').hidden = isLast;
+    document.getElementById('cm-finish-inline').style.display = isLast ? 'flex' : 'none';
   }
 
   function cookPrev() {
@@ -2578,7 +2574,7 @@
   function cookFinish() {
     document.getElementById('cm-page').style.display = 'none';
     document.getElementById('cm-next').hidden = true;
-    document.getElementById('cm-finish').style.display = 'none';
+    document.getElementById('cm-finish-inline').style.display = 'none';
     document.getElementById('cm-done').classList.add('active');
     document.getElementById('cm-prev').hidden = false;
   }
