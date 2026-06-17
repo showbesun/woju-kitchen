@@ -805,6 +805,47 @@
       transition: width 0.35s cubic-bezier(.4,0,.2,1);
     }
 
+    /* 桌機版階段式進度列（手機預設隱藏） */
+    .cook-phase-nav {
+      display: none;
+      align-items: center;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      gap: 0;
+      margin: 10px 0 8px;
+    }
+    .cook-phase-nav::-webkit-scrollbar { display: none; }
+
+    .cook-phase-nav-item {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .cook-phase-nav-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--placeholder);
+      letter-spacing: 0.3px;
+      padding-bottom: 2px;
+    }
+    .cook-phase-nav-label.is-done {
+      color: var(--text-muted);
+    }
+    .cook-phase-nav-label.is-current {
+      color: var(--brand);
+      font-weight: 700;
+      border-bottom: 2px solid var(--brand);
+    }
+    .cook-phase-nav-sep {
+      color: var(--line);
+      margin: 0 10px;
+      font-size: 11px;
+      user-select: none;
+    }
+
     /* 每個階段頁 */
     .cook-page {
       flex: 1;
@@ -1002,6 +1043,8 @@
       .cook-done-img { width: 230px; }
       .cook-done-title { font-size: 34px; }
       .cook-arrow { width: 48px; height: 48px; font-size: 20px; }
+      .cook-phase-nav { display: flex; }
+      .cook-phase-progress { display: none; }
     }
     @media (max-width: 480px) {
       .cook-wrap { padding: 0 16px; }
@@ -1317,6 +1360,7 @@
   <div class="cook-wrap">
     <div class="cook-header">
       <div class="cook-recipe-name" id="cm-recipe-name"></div>
+      <div class="cook-phase-nav" id="cm-phase-nav"></div>
       <div class="cook-progress-bar"><div class="cook-progress-fill" id="cm-bar"></div></div>
     </div>
 
@@ -2544,6 +2588,11 @@
 
     document.getElementById('cm-phase').textContent = phase.name;
     document.getElementById('cm-progress').textContent = `第 ${cookPhaseIndex + 1} 段 / 共 ${total} 段`;
+    document.getElementById('cm-phase-nav').innerHTML = cookPhases.map((p, i) => {
+      const cls = i < cookPhaseIndex ? 'is-done' : i === cookPhaseIndex ? 'is-current' : '';
+      const sep = i < cookPhases.length - 1 ? '<span class="cook-phase-nav-sep">—</span>' : '';
+      return `<span class="cook-phase-nav-item"><span class="cook-phase-nav-label ${cls}">${p.name}</span>${sep}</span>`;
+    }).join('');
     document.getElementById('cm-bar').style.width = `${((cookPhaseIndex + 1) / total) * 100}%`;
     document.getElementById('cm-steps-list').innerHTML = phase.steps.map((s, i) =>
       `<li><span class="cook-step-num">${i + 1}</span><span>${wrapParens(s)}</span></li>`
