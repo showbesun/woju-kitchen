@@ -2525,8 +2525,7 @@
     document.getElementById('cm-page').scrollTop = 0;
 
     document.getElementById('cm-prev').hidden = isFirst;
-    document.getElementById('cm-next').hidden = isLast;
-    document.getElementById('cm-finish').style.display = isLast ? '' : 'none';
+    document.getElementById('cm-next').hidden = false;
   }
 
   function cookPrev() {
@@ -2542,6 +2541,7 @@
 
   function cookNext() {
     if (cookPhaseIndex < cookPhases.length - 1) { cookPhaseIndex++; cookRender(); }
+    else cookFinish();
   }
 
   function cookFinish() {
