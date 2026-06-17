@@ -737,6 +737,217 @@
       .main-layout { gap: 20px; }
       #cart-sidebar { width: 240px; padding-left: 20px; }
     }
+
+    /* ═══════════════════════════════
+       跟煮模式
+    ═══════════════════════════════ */
+    #cookMode {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: var(--bg);
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #cookMode.active { display: flex; }
+
+    .cook-wrap {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 28px;
+      position: relative;
+    }
+
+    .cook-close {
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      background: var(--surface);
+      border: 1.5px solid var(--line);
+      font-size: 18px;
+      color: var(--text-muted);
+      cursor: pointer;
+      line-height: 1;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      z-index: 1;
+      transition: background 0.12s;
+    }
+    .cook-close:hover { background: var(--cream); }
+
+    .cook-header {
+      padding: 24px 0 18px;
+      border-bottom: 1.5px solid var(--line);
+      flex-shrink: 0;
+    }
+
+    .cook-recipe-name {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--placeholder);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .cook-phase {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 6px;
+      min-height: 28px;
+    }
+
+    .cook-progress {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .cook-progress-bar {
+      height: 3px;
+      background: var(--cream);
+      border-radius: 2px;
+      margin-top: 14px;
+      overflow: hidden;
+    }
+    .cook-progress-fill {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 2px;
+      transition: width 0.35s cubic-bezier(.4,0,.2,1);
+    }
+
+    .cook-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 36px 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .cook-step-text {
+      font-size: 22px;
+      line-height: 1.85;
+      color: var(--text);
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+    }
+    .cook-step-text strong { color: var(--brand-dark); }
+
+    .cook-footer {
+      display: flex;
+      gap: 12px;
+      padding: 20px 0;
+      padding-bottom: calc(20px + env(safe-area-inset-bottom));
+      border-top: 1.5px solid var(--line);
+      flex-shrink: 0;
+    }
+
+    .cook-nav-btn {
+      flex: 1;
+      padding: 16px 0;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Noto Sans TC', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    .cook-nav-prev {
+      background: var(--surface);
+      border: 1.5px solid var(--line);
+      color: var(--text-muted);
+    }
+    .cook-nav-prev:disabled { opacity: 0.3; cursor: default; }
+    .cook-nav-next {
+      background: var(--brand);
+      border: none;
+      color: #fff;
+    }
+    .cook-nav-next:hover { background: var(--brand-dark); }
+
+    /* 完成畫面 */
+    .cook-done {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 40px 0;
+      text-align: center;
+    }
+    .cook-done.active { display: flex; }
+
+    .cook-done-img {
+      width: 190px;
+      max-width: 55%;
+      height: auto;
+      margin-bottom: 28px;
+    }
+
+    .cook-done-title {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--brand);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .cook-done-sub {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .cook-done-return {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 15px 44px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Noto Sans TC', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .cook-done-return:hover { background: var(--brand-dark); }
+
+    /* 開始跟煮按鈕（在詳情頁） */
+    .btn-start-cook {
+      display: block;
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px 0;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Noto Sans TC', sans-serif;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.15s;
+    }
+    .btn-start-cook:hover { background: var(--brand-dark); }
+
+    @media (min-width: 769px) {
+      .cook-step-text { font-size: 24px; }
+      .cook-done-img { width: 240px; }
+      .cook-done-title { font-size: 34px; }
+    }
+    @media (max-width: 480px) {
+      .cook-step-text { font-size: 19px; }
+      .cook-wrap { padding: 0 20px; }
+    }
   </style>
 </head>
 <body>
@@ -833,6 +1044,7 @@
       <div class="modal-section">
         <div class="modal-section-title">🍳 實戰步驟</div>
         <ol class="steps-list" id="d-steps"></ol>
+        <button class="btn-start-cook" id="btn-start-cook" onclick="openCookMode()" style="display:none;">開始跟煮</button>
       </div>
 
       <div class="modal-section" id="d-tips-section">
@@ -1035,6 +1247,35 @@
 
 <!-- Floating Add Button (mobile only, must be after all modals for CSS ~ selector) -->
 <button class="fab-add" onclick="openAddModal()" aria-label="新增食譜" title="新增食譜">＋</button>
+
+<!-- 跟煮模式 -->
+<div id="cookMode">
+  <button class="cook-close" onclick="closeCookMode()">✕</button>
+  <div class="cook-wrap">
+    <div class="cook-header" id="cm-header">
+      <div class="cook-recipe-name" id="cm-recipe-name"></div>
+      <div class="cook-phase" id="cm-phase"></div>
+      <div class="cook-progress" id="cm-progress"></div>
+      <div class="cook-progress-bar"><div class="cook-progress-fill" id="cm-bar"></div></div>
+    </div>
+
+    <div class="cook-body" id="cm-step-body">
+      <div class="cook-step-text" id="cm-step-text"></div>
+    </div>
+
+    <div class="cook-done" id="cm-done">
+      <img src="chef_girl_serving.png" class="cook-done-img" alt="" aria-hidden="true" />
+      <div class="cook-done-title">完成，上菜！</div>
+      <div class="cook-done-sub">今天也有好好吃飯。</div>
+      <button class="cook-done-return" onclick="closeCookMode()">回到食譜</button>
+    </div>
+
+    <div class="cook-footer" id="cm-footer">
+      <button class="cook-nav-btn cook-nav-prev" id="cm-prev" onclick="cookPrev()">← 前一步</button>
+      <button class="cook-nav-btn cook-nav-next" id="cm-next" onclick="cookNext()">後一步 →</button>
+    </div>
+  </div>
+</div>
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
@@ -1690,6 +1931,8 @@
     const authorEl = document.getElementById('d-author');
     if (r.author) { authorEl.textContent = '上菜人 · ' + r.author; authorEl.style.display = ''; }
     else { authorEl.style.display = 'none'; }
+    const hasSteps = (r.steps || []).some(s => !s.startsWith('##'));
+    document.getElementById('btn-start-cook').style.display = hasSteps ? 'block' : 'none';
     document.getElementById('detailModal').classList.add('active');
   }
 
@@ -2190,6 +2433,71 @@
   }
 
   renderRecipes();
+
+  /* ─── 跟煮模式 ─── */
+  let cookSteps = [];
+  let cookIndex = 0;
+
+  function openCookMode() {
+    if (!currentRecipe) return;
+    const steps = currentRecipe.steps || [];
+
+    cookSteps = [];
+    let currentPhase = '';
+    for (const s of steps) {
+      if (s.startsWith('##')) {
+        currentPhase = s.slice(2).trim();
+      } else {
+        cookSteps.push({ phase: currentPhase, text: s });
+      }
+    }
+    if (cookSteps.length === 0) return;
+
+    cookIndex = 0;
+    document.getElementById('cm-recipe-name').textContent = currentRecipe.title;
+    document.getElementById('cm-done').classList.remove('active');
+    document.getElementById('cm-step-body').style.display = '';
+    document.getElementById('cm-footer').style.display = '';
+    document.getElementById('cm-header').style.display = '';
+    cookRender();
+    document.getElementById('cookMode').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCookMode() {
+    document.getElementById('cookMode').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function cookRender() {
+    const total = cookSteps.length;
+    const step = cookSteps[cookIndex];
+    const isLast = cookIndex === total - 1;
+
+    document.getElementById('cm-phase').textContent = step.phase || '';
+    document.getElementById('cm-progress').textContent = `Step ${cookIndex + 1} / ${total}`;
+    document.getElementById('cm-bar').style.width = `${((cookIndex + 1) / total) * 100}%`;
+    document.getElementById('cm-step-text').innerHTML = wrapParens(step.text);
+
+    document.getElementById('cm-prev').disabled = cookIndex === 0;
+    document.getElementById('cm-next').textContent = isLast ? '完成，上菜！' : '後一步 →';
+  }
+
+  function cookPrev() {
+    if (cookIndex > 0) { cookIndex--; cookRender(); }
+  }
+
+  function cookNext() {
+    if (cookIndex < cookSteps.length - 1) {
+      cookIndex++;
+      cookRender();
+    } else {
+      document.getElementById('cm-step-body').style.display = 'none';
+      document.getElementById('cm-footer').style.display = 'none';
+      document.getElementById('cm-header').style.display = 'none';
+      document.getElementById('cm-done').classList.add('active');
+    }
+  }
 </script>
 </body>
 </html>
