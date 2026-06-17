@@ -2635,6 +2635,19 @@
     if (e.key === 'ArrowRight') cookNext();
     if (e.key === 'Escape')     closeCookMode();
   });
+
+  let _swipeX = null;
+  document.getElementById('cookMode').addEventListener('touchstart', function(e) {
+    _swipeX = e.touches[0].clientX;
+  }, { passive: true });
+  document.getElementById('cookMode').addEventListener('touchend', function(e) {
+    if (_swipeX === null) return;
+    const dx = e.changedTouches[0].clientX - _swipeX;
+    _swipeX = null;
+    if (Math.abs(dx) < 50) return;
+    if (dx < 0) cookNext();
+    else cookPrev();
+  }, { passive: true });
 </script>
 </body>
 </html>
