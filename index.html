@@ -810,7 +810,13 @@
       flex: 1;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 28px 0 120px;
+    }
+    .cook-page-inner {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 0;
     }
 
     .cook-phase-name {
@@ -864,7 +870,7 @@
     /* 左右翻頁箭頭 */
     .cook-arrow {
       position: fixed;
-      top: 55%;
+      top: 50%;
       transform: translateY(-50%);
       width: 42px;
       height: 42px;
@@ -1296,9 +1302,11 @@
     </div>
 
     <div class="cook-page" id="cm-page">
-      <div class="cook-phase-name" id="cm-phase"></div>
-      <div class="cook-phase-progress" id="cm-progress"></div>
-      <ol class="cook-steps-list" id="cm-steps-list"></ol>
+      <div class="cook-page-inner">
+        <div class="cook-phase-name" id="cm-phase"></div>
+        <div class="cook-phase-progress" id="cm-progress"></div>
+        <ol class="cook-steps-list" id="cm-steps-list"></ol>
+      </div>
     </div>
 
     <div class="cook-done" id="cm-done">
