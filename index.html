@@ -754,14 +754,17 @@
         color: #fff;
         font-weight: 600;
       }
-      .container { padding: 16px 16px 100px; }
+      #cart-sidebar { display: none; }
+      .container { padding: 16px 16px 140px; }
       .modal-body { padding: 24px 20px; }
       .modal-header { padding: 24px 20px; }
       .modal-meta { flex-wrap: wrap; gap: 16px; }
       .form-row { grid-template-columns: 1fr; }
       .recipe-grid { grid-template-columns: 1fr; }
-      .fab-add { display: flex; }
+      .fab-add { display: flex; bottom: calc(70px + env(safe-area-inset-bottom)); }
       .add-recipe-footer { display: flex; }
+      .mobile-cart-strip { display: flex; }
+      .cart-sheet { display: flex; }
     }
 
     /* ── 平板：版型微調 ── */
@@ -770,6 +773,75 @@
       .main-layout { gap: 20px; }
       #cart-sidebar { width: 240px; padding-left: 20px; }
     }
+
+    /* ── 手機版底部橫帶 & Bottom Sheet ── */
+    .mobile-cart-strip {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      align-items: center; justify-content: space-between;
+      padding: 0 20px;
+      padding-bottom: env(safe-area-inset-bottom);
+      height: calc(52px + env(safe-area-inset-bottom));
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      cursor: pointer; z-index: 150;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .strip-label { font-size: 14px; color: var(--text-muted); flex: 1; }
+    .strip-label.has-items { color: var(--text); font-weight: 600; }
+    .strip-chevron { font-size: 22px; color: var(--brand); margin-left: 8px; line-height: 1; }
+
+    .cart-sheet-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 198;
+    }
+    .cart-sheet-backdrop.active { display: block; }
+
+    .cart-sheet {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      max-height: 82vh;
+      background: var(--bg);
+      border-radius: 20px 20px 0 0;
+      z-index: 199;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .cart-sheet.active { transform: translateY(0); }
+    .cart-sheet-handle {
+      width: 36px; height: 4px; border-radius: 2px;
+      background: var(--line); margin: 12px auto 4px; flex-shrink: 0;
+    }
+    .cart-sheet-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px 12px; border-bottom: 1px solid var(--line); flex-shrink: 0;
+    }
+    .cart-sheet-title {
+      font-size: 18px; font-weight: 700;
+      font-family: 'Black Han Sans', 'Noto Sans KR', sans-serif; color: var(--text);
+    }
+    .cart-sheet-close-btn {
+      background: none; border: none; font-size: 18px;
+      color: var(--text-muted); cursor: pointer; padding: 4px;
+    }
+    .cart-sheet-body {
+      overflow-y: auto; flex: 1; padding: 20px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .cart-sheet-empty {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 14px; padding: 16px 0 8px; text-align: center;
+    }
+    .cart-sheet-empty-girl { height: 130px; width: auto; }
+    .cart-sheet-empty-text { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+    .cart-sheet-girl { height: 90px; width: auto; display: block; margin: 0 auto 16px; }
+    .cart-sheet-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .cart-sheet .btn-cart-go { width: 100%; padding: 12px 0; font-size: 14px; }
 
     /* ═══════════════════════════════
        跟煮模式
@@ -1398,6 +1470,20 @@
 <!-- Floating Add Button (mobile only, must be after all modals for CSS ~ selector) -->
 <button class="fab-add" onclick="openAddModal()" aria-label="新增食譜" title="新增食譜">＋</button>
 
+<div class="mobile-cart-strip" id="mobile-cart-strip" onclick="openCartSheet()">
+  <span class="strip-label" id="strip-label">今天吃什麼？點 ＋ 加入菜單</span>
+  <span class="strip-chevron">›</span>
+</div>
+<div class="cart-sheet-backdrop" id="cart-sheet-backdrop" onclick="closeCartSheet()"></div>
+<div class="cart-sheet" id="cart-sheet">
+  <div class="cart-sheet-handle"></div>
+  <div class="cart-sheet-hdr">
+    <span class="cart-sheet-title">今天吃什麼？</span>
+    <button class="cart-sheet-close-btn" onclick="closeCartSheet()">✕</button>
+  </div>
+  <div class="cart-sheet-body" id="cart-sheet-body"></div>
+</div>
+
 <!-- 跟煮模式 -->
 <div id="cookMode">
   <button class="cook-close" onclick="closeCookMode()">✕</button>
@@ -1432,7 +1518,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '84';
+  const DATA_VERSION = '85';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2514,6 +2600,59 @@
         </div>`;
       }).join('');
       goBtn.disabled = false;
+    }
+    updateCartStrip();
+    if (document.getElementById('cart-sheet').classList.contains('active')) renderCartSheet();
+  }
+
+  function updateCartStrip() {
+    const label = document.getElementById('strip-label');
+    if (!label) return;
+    if (cartIds.size === 0) {
+      label.textContent = '今天吃什麼？點 ＋ 加入菜單';
+      label.classList.remove('has-items');
+    } else {
+      label.textContent = `今日菜單 ${cartIds.size} 道`;
+      label.classList.add('has-items');
+    }
+  }
+
+  function openCartSheet() {
+    document.getElementById('cart-sheet').classList.add('active');
+    document.getElementById('cart-sheet-backdrop').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    renderCartSheet();
+  }
+
+  function closeCartSheet() {
+    document.getElementById('cart-sheet').classList.remove('active');
+    document.getElementById('cart-sheet-backdrop').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function renderCartSheet() {
+    const recipes = loadRecipes();
+    const body = document.getElementById('cart-sheet-body');
+    if (!body) return;
+    if (cartIds.size === 0) {
+      body.innerHTML = `
+        <div class="cart-sheet-empty">
+          <img src="chef_girl_flipped.png" class="cart-sheet-empty-girl" alt="" aria-hidden="true" />
+          <p class="cart-sheet-empty-text">還沒有菜<br>先去食譜卡右上角點 ＋</p>
+        </div>`;
+    } else {
+      const cards = [...cartIds].map(id => {
+        const r = recipes.find(r => r.id === id);
+        if (!r) return '';
+        return `<div class="cart-mini-card">
+          <span>${r.title}</span>
+          <button class="cart-mini-remove" onclick="toggleCart(${id})" title="移除">×</button>
+        </div>`;
+      }).join('');
+      body.innerHTML = `
+        <img src="chef_girl_flipped.png" class="cart-sheet-girl" alt="" aria-hidden="true" />
+        <div class="cart-sheet-cards">${cards}</div>
+        <button class="btn-cart-go" onclick="openCartModal();closeCartSheet();">衝去買菜</button>`;
     }
   }
 
