@@ -1389,7 +1389,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '82';
+  const DATA_VERSION = '83';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2213,7 +2213,7 @@
       const text = [r.title, r.subtitle, r.cuisine, ...(r.tags || [])].join(' ').toLowerCase();
       return (!search || text.includes(search)) &&
              (!cuisine || r.cuisine === cuisine);
-    });
+    }).sort((a, b) => b.id - a.id);
 
 
     const grid = document.getElementById('recipeGrid');
