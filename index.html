@@ -622,12 +622,6 @@
     }
     #d-cart-btn:hover { border-color: var(--brand); color: var(--brand); }
     #d-cart-btn.active { background: var(--brand); border-color: var(--brand); color: var(--surface); font-weight: bold; }
-    .cart-section-label {
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--placeholder); padding: 10px 0 4px; border-bottom: 1px solid var(--line);
-      margin-bottom: 4px; margin-top: 8px;
-    }
-
     /* ── 吉祥物 CTA 元件 ── */
     .mascot-img-mobile { display: none; }
     /* cta-hint 桌機也顯示，作為 sidebar 的提示文字 */
@@ -767,6 +761,13 @@
       .add-recipe-footer { display: flex; }
       .mobile-cart-strip { display: flex; }
       .cart-sheet { display: flex; }
+      /* 縮小 modal 頂部留白，標題縮小 */
+      .modal-overlay { padding: 12px 12px 80px; }
+      .modal-title { font-size: 24px; }
+      /* 放大觸控目標 */
+      .portion-btn { width: 44px; height: 44px; }
+      .cart-btn { width: 40px; height: 40px; top: 8px; right: 8px; font-size: 17px; }
+      .modal-close { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; top: 10px; right: 10px; }
     }
 
     /* ── 平板：版型微調 ── */
@@ -1174,7 +1175,7 @@
 </header>
 
 <div class="search-bar">
-  <input class="search-input" type="text" id="searchInput" placeholder="搜尋食譜名稱、菜系、標籤..." oninput="renderRecipes()" />
+  <input class="search-input" type="text" id="searchInput" placeholder="搜尋食譜名稱、菜系、標籤..." inputmode="search" oninput="renderRecipes()" />
   <select class="filter-select" id="cuisineFilter" onchange="renderRecipes()">
     <option value="">所有菜系</option>
     <option value="中式">中式</option>
@@ -1521,7 +1522,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '88';
+  const DATA_VERSION = '89';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2952,6 +2953,18 @@
     if (Math.abs(dx) < 50) return;
     if (dx < 0) cookNext();
     else cookPrev();
+  }, { passive: true });
+
+  // 下滑關閉 detail modal（在 header 區域下滑）
+  let _modalSwipeY = null;
+  document.querySelector('#detailModal .modal-header').addEventListener('touchstart', function(e) {
+    _modalSwipeY = e.touches[0].clientY;
+  }, { passive: true });
+  document.querySelector('#detailModal .modal-header').addEventListener('touchend', function(e) {
+    if (_modalSwipeY === null) return;
+    const dy = e.changedTouches[0].clientY - _modalSwipeY;
+    _modalSwipeY = null;
+    if (dy > 60) closeModal('detailModal');
   }, { passive: true });
 </script>
 </body>
