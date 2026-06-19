@@ -839,8 +839,11 @@
     }
     .cart-sheet-empty-girl { height: 130px; width: auto; }
     .cart-sheet-empty-text { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
-    .cart-sheet-girl { height: 90px; width: auto; display: block; margin: 0 auto 16px; }
-    .cart-sheet-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .cart-sheet-content { display: flex; align-items: flex-end; gap: 12px; }
+    .cart-sheet-left { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .cart-sheet-girl { height: 160px; width: auto; flex-shrink: 0; align-self: flex-end; }
+    .cart-sheet-cards { display: flex; flex-direction: column; gap: 8px; }
+    .cart-sheet .cart-mini-card { font-size: 16px; padding: 10px 14px; }
     .cart-sheet .btn-cart-go { width: 100%; padding: 12px 0; font-size: 14px; }
 
     /* ═══════════════════════════════
@@ -1518,7 +1521,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '87';
+  const DATA_VERSION = '88';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2650,9 +2653,13 @@
         </div>`;
       }).join('');
       body.innerHTML = `
-        <img src="chef_girl_flipped.png" class="cart-sheet-girl" alt="" aria-hidden="true" />
-        <div class="cart-sheet-cards">${cards}</div>
-        <button class="btn-cart-go" onclick="openCartModal();closeCartSheet();">衝去買菜</button>`;
+        <div class="cart-sheet-content">
+          <div class="cart-sheet-left">
+            <div class="cart-sheet-cards">${cards}</div>
+            <button class="btn-cart-go" onclick="openCartModal();closeCartSheet();">衝去買菜</button>
+          </div>
+          <img src="chef_girl_flipped.png" class="cart-sheet-girl" alt="" aria-hidden="true" />
+        </div>`;
     }
   }
 
