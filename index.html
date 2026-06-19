@@ -715,12 +715,45 @@
     }
 
     /* ── 手機：細部調整 ── */
+    .cuisine-pills { display: none; }
+
     @media (max-width: 600px) {
       header { padding: 16px 20px; }
       .logo-main { font-size: 26px; letter-spacing: 2px; }
       .logo-sub { font-size: 10px; letter-spacing: 1px; white-space: nowrap; }
       .btn-add { display: none; }
-      .search-bar { padding: 14px 16px; flex-direction: column; gap: 10px; }
+      .search-bar { padding: 14px 16px; gap: 0; }
+      .filter-select { display: none; }
+      .cuisine-pills {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 10px 16px 14px;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        border-bottom: 1px solid var(--line);
+        background: var(--bg);
+      }
+      .cuisine-pills::-webkit-scrollbar { display: none; }
+      .cuisine-pill {
+        flex-shrink: 0;
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--text-muted);
+        border-radius: var(--radius-pill);
+        padding: 6px 16px;
+        font-size: 13px;
+        font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+      }
+      .cuisine-pill.active {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #fff;
+        font-weight: 600;
+      }
       .container { padding: 16px 16px 100px; }
       .modal-body { padding: 24px 20px; }
       .modal-header { padding: 24px 20px; }
@@ -1078,6 +1111,16 @@
     <option value="融合">融合</option>
   </select>
 </div>
+<div class="cuisine-pills" id="cuisinePills">
+  <button class="cuisine-pill active" onclick="setCuisinePill(this, '')">全部</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '台式')">台式</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '韓式')">韓式</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '日式')">日式</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '中式')">中式</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '義式')">義式</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '西式')">西式</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '融合')">融合</button>
+</div>
 
 <div class="container">
   <div class="main-layout">
@@ -1389,7 +1432,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '83';
+  const DATA_VERSION = '84';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2204,6 +2247,13 @@
   }
 
   // ── 渲染食譜列表 ──
+  function setCuisinePill(btn, value) {
+    document.querySelectorAll('.cuisine-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('cuisineFilter').value = value;
+    renderRecipes();
+  }
+
   function renderRecipes() {
     const recipes = loadRecipes();
     const search = document.getElementById('searchInput').value.toLowerCase();
