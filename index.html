@@ -1389,7 +1389,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '80';
+  const DATA_VERSION = '81';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2227,7 +2227,7 @@
     grid.innerHTML = filtered.map(r => {
       const cuisineTags = r.cuisine ? [`<span class="tag cuisine">${r.cuisine}</span>`] : [];
       const otherTags = (r.tags || []).filter(t => t !== r.cuisine)
-        .slice(0, 4 - cuisineTags.length)
+        .slice(0, 5 - cuisineTags.length)
         .map(t => `<span class="tag-dark">${t}</span>`);
       const tagHtml = [...cuisineTags, ...otherTags].join('');
       return `
