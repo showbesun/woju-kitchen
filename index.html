@@ -761,8 +761,20 @@
       .add-recipe-footer { display: flex; }
       .mobile-cart-strip { display: flex; }
       .cart-sheet { display: flex; }
-      /* 縮小 modal 頂部留白，標題縮小 */
-      .modal-overlay { padding: 12px 12px 80px; }
+      /* Modal → full-screen bottom sheet */
+      .modal-overlay { padding: 0; overflow: hidden; align-items: flex-end; }
+      .modal-overlay .modal {
+        border-radius: 20px 20px 0 0; max-height: 92dvh;
+        max-width: 100%; display: flex; flex-direction: column;
+      }
+      .modal-overlay.active .modal { animation: slideUpModal 0.3s cubic-bezier(0.32, 0.72, 0, 1) both; }
+      .modal-header { padding-top: 16px; }
+      .modal-header::before {
+        content: ''; display: block;
+        width: 36px; height: 4px; border-radius: 2px;
+        background: var(--line); margin: 0 auto 12px;
+      }
+      .modal-body { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
       .modal-title { font-size: 24px; }
       /* 放大觸控目標 */
       .portion-btn { width: 44px; height: 44px; }
@@ -775,6 +787,11 @@
       .container { padding: 32px 28px; }
       .main-layout { gap: 20px; }
       #cart-sidebar { width: 240px; padding-left: 20px; }
+    }
+
+    @keyframes slideUpModal {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
     }
 
     /* ── 手機版底部橫帶 & Bottom Sheet ── */
@@ -1522,7 +1539,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '89';
+  const DATA_VERSION = '90';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2955,17 +2972,24 @@
     else cookPrev();
   }, { passive: true });
 
-  // 下滑關閉 detail modal（在 header 區域下滑）
-  let _modalSwipeY = null;
-  document.querySelector('#detailModal .modal-header').addEventListener('touchstart', function(e) {
-    _modalSwipeY = e.touches[0].clientY;
-  }, { passive: true });
-  document.querySelector('#detailModal .modal-header').addEventListener('touchend', function(e) {
-    if (_modalSwipeY === null) return;
-    const dy = e.changedTouches[0].clientY - _modalSwipeY;
-    _modalSwipeY = null;
-    if (dy > 60) closeModal('detailModal');
-  }, { passive: true });
+  // 下滑關閉 modal（header 區往下滑 40px 即觸發，阻止 pull-to-refresh）
+  ['detailModal', 'cartModal', 'addModal'].forEach(function(id) {
+    const hdr = document.querySelector('#' + id + ' .modal-header');
+    if (!hdr) return;
+    let _sy = null, _dy = 0;
+    hdr.addEventListener('touchstart', function(e) {
+      _sy = e.touches[0].clientY; _dy = 0;
+    }, { passive: true });
+    hdr.addEventListener('touchmove', function(e) {
+      if (_sy === null) return;
+      _dy = e.touches[0].clientY - _sy;
+      if (_dy > 0) e.preventDefault();
+    }, { passive: false });
+    hdr.addEventListener('touchend', function() {
+      const d = _dy; _sy = null; _dy = 0;
+      if (d > 40) closeModal(id);
+    }, { passive: true });
+  });
 </script>
 </body>
 </html>
