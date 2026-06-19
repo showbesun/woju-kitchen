@@ -1174,24 +1174,24 @@
   <input class="search-input" type="text" id="searchInput" placeholder="搜尋食譜名稱、菜系、標籤..." oninput="renderRecipes()" />
   <select class="filter-select" id="cuisineFilter" onchange="renderRecipes()">
     <option value="">所有菜系</option>
-    <option value="台式">台式</option>
-    <option value="韓式">韓式</option>
-    <option value="日式">日式</option>
     <option value="中式">中式</option>
+    <option value="韓式">韓式</option>
     <option value="義式">義式</option>
     <option value="西式">西式</option>
+    <option value="日式">日式</option>
     <option value="融合">融合</option>
+    <option value="其他">其他</option>
   </select>
 </div>
 <div class="cuisine-pills" id="cuisinePills">
   <button class="cuisine-pill active" onclick="setCuisinePill(this, '')">全部</button>
-  <button class="cuisine-pill" onclick="setCuisinePill(this, '台式')">台式</button>
-  <button class="cuisine-pill" onclick="setCuisinePill(this, '韓式')">韓式</button>
-  <button class="cuisine-pill" onclick="setCuisinePill(this, '日式')">日式</button>
   <button class="cuisine-pill" onclick="setCuisinePill(this, '中式')">中式</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '韓式')">韓式</button>
   <button class="cuisine-pill" onclick="setCuisinePill(this, '義式')">義式</button>
   <button class="cuisine-pill" onclick="setCuisinePill(this, '西式')">西式</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '日式')">日式</button>
   <button class="cuisine-pill" onclick="setCuisinePill(this, '融合')">融合</button>
+  <button class="cuisine-pill" onclick="setCuisinePill(this, '其他')">其他</button>
 </div>
 
 <div class="container">
@@ -1314,13 +1314,13 @@
         <div class="form-group">
           <label class="form-label">菜系</label>
           <select class="form-select" id="f-cuisine">
-            <option value="台式">台式</option>
-            <option value="韓式">韓式</option>
-            <option value="日式">日式</option>
             <option value="中式">中式</option>
+            <option value="韓式">韓式</option>
             <option value="義式">義式</option>
             <option value="西式">西式</option>
+            <option value="日式">日式</option>
             <option value="融合">融合</option>
+            <option value="其他">其他</option>
           </select>
         </div>
       </div>
@@ -1518,7 +1518,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '86';
+  const DATA_VERSION = '87';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -1526,7 +1526,7 @@
       id: 1,
       title: '阿嬤紅燒雞 2.0',
       subtitle: '洋蔥・紅蘿蔔・甘栗仁',
-      cuisine: '台式',
+      cuisine: '中式',
       note: '阿嬤原版是直接加水加醬油燉，我這版先把雞肉煎香一點。不是比較厲害，只是比較搞剛。',
       stars: 2,
       starsLabel: '家常實力',
@@ -2482,7 +2482,7 @@
     document.getElementById('f-title').value = r.title || '';
     document.getElementById('f-author').value = r.author || '';
     const cuisineEl = document.getElementById('f-cuisine');
-    cuisineEl.value = r.cuisine || '台式';
+    cuisineEl.value = r.cuisine || '中式';
 
     document.getElementById('f-portions').value = r.basePortions || 2;
     const timeEl = document.getElementById('f-time');
