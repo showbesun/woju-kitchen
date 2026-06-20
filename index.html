@@ -157,11 +157,11 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.09);
     }
 
-    .card-thumb {
-      width: 96px;
-      flex-shrink: 0;
+    .card-img {
+      width: 100%;
+      height: 180px;
       object-fit: cover;
-      align-self: stretch;
+      display: block;
     }
 
     .detail-hero {
@@ -173,14 +173,8 @@
 
     .card-header {
       background: var(--cream);
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: stretch;
-    }
-    .card-header-text {
-      flex: 1;
       padding: 20px;
-      min-width: 0;
+      border-bottom: 1px solid var(--line);
     }
 
     .card-cuisine {
@@ -206,7 +200,8 @@
 
     .card-body { padding: 12px 20px; }
 
-    .card-meta { display: flex; justify-content: space-between; margin-bottom: 16px; }
+    .card-meta { display: flex; }
+    .card-meta .meta-item { flex: 0 0 50%; flex-direction: row; align-items: center; gap: 6px; }
 
     .meta-item { display: flex; flex-direction: column; gap: 2px; }
 
@@ -1564,7 +1559,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '100';
+  const DATA_VERSION = '101';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2424,12 +2419,10 @@
         <button class="cart-btn ${cartIds.has(r.id) ? 'active' : ''}" data-id="${r.id}"
           onclick="event.stopPropagation(); toggleCart(${r.id})"
           title="加入購物清單">${cartIds.has(r.id) ? '✓' : '+'}</button>
+        ${r.image ? `<img class="card-img" src="${r.image}" alt="" loading="lazy">` : ''}
         <div class="card-header">
-          <div class="card-header-text">
-            <div class="card-title">${r.title}</div>
-            <div class="card-tags" style="margin-top:12px;">${tagHtml}</div>
-          </div>
-          ${r.image ? `<img class="card-thumb" src="${r.image}" alt="" loading="lazy">` : ''}
+          <div class="card-title">${r.title}</div>
+          <div class="card-tags" style="margin-top:12px;">${tagHtml}</div>
         </div>
         <div class="card-body">
           <div class="card-meta">
