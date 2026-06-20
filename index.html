@@ -2656,7 +2656,7 @@
     const area = document.getElementById('cart-cards-area');
     const goBtn = document.getElementById('cart-go-btn');
     if (cartIds.size === 0) {
-      area.innerHTML = '<span class="cart-empty-hint">點 ＋ 加入食譜</span>';
+      area.innerHTML = '';
       goBtn.disabled = true;
     } else {
       area.innerHTML = [...cartIds].map(id => {
