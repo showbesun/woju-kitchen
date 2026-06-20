@@ -761,21 +761,23 @@
       .add-recipe-footer { display: flex; }
       .mobile-cart-strip { display: flex; }
       .cart-sheet { display: flex; }
-      /* Modal → full-screen bottom sheet */
+      /* Modal → full-screen */
       .modal-overlay { padding: 0; overflow: hidden; align-items: flex-end; }
       .modal-overlay .modal {
-        border-radius: 20px 20px 0 0; max-height: 92dvh;
+        border-radius: 0; max-height: 100vh; max-height: 100dvh;
         max-width: 100%; display: flex; flex-direction: column;
       }
       .modal-overlay.active .modal { animation: slideUpModal 0.3s cubic-bezier(0.32, 0.72, 0, 1) both; }
-      .modal-header { padding-top: 16px; }
-      .modal-header::before {
-        content: ''; display: block;
-        width: 36px; height: 4px; border-radius: 2px;
-        background: var(--line); margin: 0 auto 12px;
-      }
+      .modal-header { padding-top: 14px; }
       .modal-body { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
       .modal-title { font-size: 24px; }
+      /* modal 開啟時隱藏底部橫帶 */
+      .modal-overlay.active ~ .mobile-cart-strip { display: none; }
+      /* cuisine 併入 tags，modal-cuisine 標籤隱藏 */
+      .modal-cuisine { display: none; }
+      /* tags + 購物清單按鈕改為垂直排列 */
+      .modal-tags-row { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+      #d-cart-btn { width: 100%; text-align: center; padding: 10px 0; }
       /* 放大觸控目標 */
       .portion-btn { width: 44px; height: 44px; }
       .cart-btn { width: 40px; height: 40px; top: 8px; right: 8px; font-size: 17px; }
@@ -1254,7 +1256,7 @@
       <button id="detail-modal-close" class="modal-close" onclick="closeModal('detailModal')">✕</button>
       <div class="modal-title" id="d-title"></div>
       <div id="d-author" style="display:none; font-size:13px; color:var(--text-muted); margin-top:6px; margin-bottom:12px;"></div>
-      <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+      <div class="modal-tags-row" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
         <div id="d-tags" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
         <button id="d-cart-btn" onclick="toggleCartFromDetail()">🛒 加入購物清單</button>
       </div>
@@ -1539,7 +1541,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '90';
+  const DATA_VERSION = '91';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2805,7 +2807,8 @@
     currentPortions = r.basePortions;
 
     document.getElementById('d-title').textContent = r.title;
-    document.getElementById('d-tags').innerHTML = (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
+    const cuisineHtml = r.cuisine ? `<span class="tag-dark">${r.cuisine}</span>` : '';
+    document.getElementById('d-tags').innerHTML = cuisineHtml + (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
     document.getElementById('d-time').textContent = r.time;
     document.getElementById('d-portion-count').textContent = currentPortions;
     document.getElementById('d-note').style.display = 'none';
