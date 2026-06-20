@@ -157,6 +157,20 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.09);
     }
 
+    .card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .detail-hero {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+    }
+
     .card-header {
       background: var(--cream);
       padding: 20px;
@@ -1263,6 +1277,8 @@
     </div>
     <div class="modal-body">
 
+      <img id="d-hero" class="detail-hero" alt="" style="display:none;">
+
       <div class="modal-meta">
         <div class="meta-item">
           <span class="meta-label">時間</span>
@@ -1542,7 +1558,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '98';
+  const DATA_VERSION = '99';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2162,6 +2178,7 @@
       starsLabel: '新手村',
       author: 'Stephany',
       note: '這是比較地道的韓式馬鈴薯餅做法，不加麵粉、不加蛋，也不加鹽，靠馬鈴薯自己沉澱出來的澱粉把餅黏起來。三顆馬鈴薯剛好煎兩張大餅，外面脆、裡面Q，吃起來很有「這不是普通薯餅」的成就感。',
+      image: 'images/r12.png',
       tags: ['蔬菜', '韓劇感', '小酌良伴', '錢包友善'],
       basePortions: 2,
       time: '約 30 分鐘',
@@ -2262,6 +2279,8 @@
     document.getElementById('d-title').textContent = r.title;
     document.getElementById('d-tags').innerHTML =
       (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
+    const heroEl1 = document.getElementById('d-hero');
+    heroEl1.src = r.image || ''; heroEl1.style.display = r.image ? 'block' : 'none';
     document.getElementById('d-time').textContent = r.time;
     const tnEl1 = document.getElementById('d-time-note');
     tnEl1.textContent = r.timeNote || ''; tnEl1.style.display = r.timeNote ? 'block' : 'none';
@@ -2399,6 +2418,7 @@
         <button class="cart-btn ${cartIds.has(r.id) ? 'active' : ''}" data-id="${r.id}"
           onclick="event.stopPropagation(); toggleCart(${r.id})"
           title="加入購物清單">${cartIds.has(r.id) ? '✓' : '+'}</button>
+        ${r.image ? `<img class="card-img" src="${r.image}" alt="${r.title}" loading="lazy">` : ''}
         <div class="card-header">
           <div class="card-title">${r.title}</div>
           <div class="card-tags" style="margin-top:12px;">${tagHtml}</div>
@@ -2814,6 +2834,8 @@
     document.getElementById('d-title').textContent = r.title;
     const cuisineHtml = r.cuisine ? `<span class="tag-dark">${r.cuisine}</span>` : '';
     document.getElementById('d-tags').innerHTML = cuisineHtml + (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
+    const heroEl2 = document.getElementById('d-hero');
+    heroEl2.src = r.image || ''; heroEl2.style.display = r.image ? 'block' : 'none';
     document.getElementById('d-time').textContent = r.time;
     const tnEl2 = document.getElementById('d-time-note');
     tnEl2.textContent = r.timeNote || ''; tnEl2.style.display = r.timeNote ? 'block' : 'none';
