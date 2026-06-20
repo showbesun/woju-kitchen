@@ -370,6 +370,75 @@
       line-height: 1.5;
     }
 
+    /* ── 買菜／備料分頁 ── */
+    .cart-tabs {
+      display: flex;
+      margin-top: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .cart-tab {
+      padding: 8px 22px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 14px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
+      letter-spacing: 1px;
+      margin-bottom: -1px;
+      transition: color 0.15s;
+    }
+    .cart-tab.active {
+      color: var(--brand);
+      border-bottom-color: var(--brand);
+      font-weight: 700;
+    }
+
+    /* ── 備料助理 ── */
+    .prep-content { padding: 16px 0 8px; }
+    .urgent-block {
+      background: #fffaf3;
+      border: 1px solid #f0d8a8;
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin: 0 0 20px;
+    }
+    .urgent-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #b07d30;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .urgent-item {
+      font-size: 13px;
+      color: var(--text);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(240, 216, 168, 0.5);
+      line-height: 1.5;
+    }
+    .urgent-item:last-child { border-bottom: none; }
+    .urgent-recipe { font-weight: 600; }
+    .prep-group-hd {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--placeholder);
+      background: var(--brand-light);
+      border-bottom: 1px solid var(--line);
+      padding: 9px 12px 5px;
+      margin-top: 4px;
+    }
+    .prep-row {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .prep-row-main { font-size: 13px; color: var(--text); line-height: 1.5; }
+    .prep-row-from { font-size: 11px; color: var(--placeholder); margin-top: 2px; }
+    .prep-empty { padding: 28px 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
+
     .steps-list { list-style: none; }
 
     .steps-phase {
@@ -1512,15 +1581,24 @@
   <div class="modal">
     <div class="modal-header">
       <button class="modal-close" onclick="closeModal('cartModal')">✕</button>
-      <div class="modal-title">🛒 購物清單</div>
+      <div class="modal-title">今日菜單</div>
       <div id="cart-modal-recipes" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;"></div>
+      <div class="cart-tabs">
+        <button class="cart-tab active" data-tab="buy" onclick="switchCartTab('buy')">買菜</button>
+        <button class="cart-tab" data-tab="prep" onclick="switchCartTab('prep')">備料</button>
+      </div>
     </div>
     <div class="modal-body">
-      <div class="modal-section">
-        <table>
-          <thead><tr><th>食材 / 調味料</th><th>數量</th></tr></thead>
-          <tbody id="cart-modal-table"></tbody>
-        </table>
+      <div id="cart-tab-buy">
+        <div class="modal-section">
+          <table>
+            <thead><tr><th>食材 / 調味料</th><th>數量</th></tr></thead>
+            <tbody id="cart-modal-table"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="cart-tab-prep" style="display:none;">
+        <div id="cart-prep-content" class="prep-content"></div>
       </div>
     </div>
   </div>
@@ -1577,7 +1655,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '105';
+  const DATA_VERSION = '106';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -1636,6 +1714,12 @@
         [30, '加洋蔥+栗子，開蓋大火收汁'],
         [40, '收汁完成，上桌 ✅'],
       ],
+      prepNotes: [
+        { name: '雞翅＋棒棒腿', amount: '600g', method: '擦乾水分備用', group: '先洗' },
+        { name: '靈魂黑金醬汁', amount: '醬油 4 匙・蠔油 1 匙・黑糖 1.5 茶匙', method: '碗裡先調好', group: '調醬汁' },
+        { name: '紅蘿蔔', amount: '半根', method: '切滾刀塊', group: '切塊' },
+        { name: '洋蔥', amount: '半顆', method: '切粗條', group: '切塊' },
+      ],
     },
     {
       id: 2,
@@ -1686,6 +1770,12 @@
         [35, '轉中小火燉煮中'],
         [65, '試味收尾，上桌 ✅'],
       ],
+      prepNotes: [
+        { name: '乾海帶', amount: '5g', method: '冷水泡 10–15 分鐘軟化', group: '先泡' },
+        { name: '牛腩', amount: '100g', method: '吸乾血水後加湯醬油抓醃 5 分鐘', group: '先醃' },
+        { name: '蒜末', amount: '1.5 瓣份量', method: '切末', group: '切末' },
+      ],
+      urgentNote: '乾海帶要先泡水 10–15 分鐘讓它軟化，泡好才能下鍋炒出香氣。',
     },
     {
       id: 3,
@@ -1736,6 +1826,10 @@
         [18, '麵提早撈起，留煮麵水 200ml'],
         [20, '大火乳化，瘋狂旋轉'],
         [25, '關火封香，盛盤 ✅'],
+      ],
+      prepNotes: [
+        { name: '大蒜', amount: '8 瓣', method: '切均勻薄片（厚薄一致才不會有的焦有的還沒香）', group: '切片' },
+        { name: '辣椒', amount: '2 根', method: '切碎', group: '切末' },
       ],
     },
     {
@@ -1791,6 +1885,12 @@
         [16, '放入模具，開始氣炸'],
         [36, '牙籤測試，完成 ✅'],
       ],
+      prepNotes: [
+        { name: '熟透香蕉', amount: '2 根', method: '用叉子壓成泥，越均勻越好', group: '開火前放旁邊' },
+        { name: '奶油', amount: '75g', method: '融化後放涼備用（不能趁熱加進蛋裡）', group: '開火前放旁邊' },
+        { name: '低筋麵粉＋小蘇打粉', amount: '160g ＋ 3/4 茶匙', method: '混合備用', group: '開火前放旁邊' },
+      ],
+      urgentNote: '氣炸鍋要先預熱 160°C 約 3 分鐘，麵糊好了才不會站在旁邊發呆。',
     },
     {
       id: 5,
@@ -1853,6 +1953,16 @@
         [37, '放大蔥、辣椒，滾 1~2 分鐘'],
         [39, '收尾調味，上桌 ✅'],
       ],
+      prepNotes: [
+        { name: '辣醬鍋醬汁', amount: '辣椒醬 2 匙・辣椒粉 1 匙・蒜末・醬油・糖', method: '先在碗裡拌勻備用', group: '調醬汁' },
+        { name: '豬五花或梅花肉', amount: '250g', method: '切大塊', group: '切塊' },
+        { name: '馬鈴薯', amount: '1 顆', method: '切大塊', group: '切塊' },
+        { name: '韓國櫛瓜', amount: '半根', method: '切 1–2 公分厚塊（切厚一點才耐煮）', group: '切塊' },
+        { name: '洋蔥', amount: '半顆', method: '切大塊', group: '切塊' },
+        { name: '板豆腐', amount: '半盒', method: '切厚塊', group: '切塊' },
+        { name: '大蔥', amount: '半根', method: '斜切段', group: '切段' },
+        { name: '青陽辣椒', amount: '1 根', method: '斜切片', group: '切片' },
+      ],
     },
     {
       id: 6,
@@ -1897,6 +2007,9 @@
         [8, '打散蛋汁、裹片'],
         [10, '熱鍋下油，開始煎'],
         [18, '起鍋，上桌 ✅'],
+      ],
+      prepNotes: [
+        { name: '櫛瓜', amount: '1 根', method: '切 0.5–0.7cm 圓片，撒鹽靜置 5 分鐘出水後徹底擦乾', group: '先醃' },
       ],
     },
     {
@@ -1959,6 +2072,14 @@
         [55, '轉極小火，蓋縫燉煮（每 10 分鐘攪拌）'],
         [115, '油光浮現，關火 ✅'],
       ],
+      prepNotes: [
+        { name: '洋蔥', amount: '1 顆', method: '切小丁', group: '切末' },
+        { name: '胡蘿蔔', amount: '1 根', method: '切小丁', group: '切末' },
+        { name: '西洋芹', amount: '2 支', method: '切小丁', group: '切末' },
+        { name: '蘑菇', amount: '6 顆', method: '切小丁', group: '切末' },
+        { name: '豬絞肉＋牛絞肉', amount: '600g', method: '提前 10 分鐘從冰箱取出回溫', group: '開火前放旁邊' },
+      ],
+      urgentNote: '這鍋要慢燉 2.5 小時，先把時間安排好再開始，一旦燉上就要待在家陪它。',
     },
     {
       id: 8,
@@ -2016,6 +2137,14 @@
         [43, '放豆腐，再煮 5 分鐘'],
         [48, '加大蔥，關火 ✅'],
       ],
+      prepNotes: [
+        { name: '熟成泡菜', amount: '400g', method: '剪成一口大小，泡菜汁留下備用', group: '開火前放旁邊' },
+        { name: '豬五花肉', amount: '200g', method: '切成豪邁塊狀', group: '切塊' },
+        { name: '洋蔥', amount: '1/4 顆', method: '切絲', group: '切絲' },
+        { name: '大蔥', amount: '1 根', method: '斜切段', group: '切段' },
+        { name: '板豆腐', amount: '半盒', method: '切厚片', group: '切片' },
+      ],
+      urgentNote: '如果買回來的泡菜還很新鮮，密封放室溫半天讓它酸一點再煮，湯頭會更有層次。',
     },
     {
       id: 9,
@@ -2082,6 +2211,17 @@
         [28, '大火快炒收乾'],
         [30, '起鍋上桌 ✅'],
       ],
+      prepNotes: [
+        { name: '去骨雞腿肉', amount: '200g', method: '切小塊後加醬油・米酒・太白粉抓醃 10–15 分鐘', group: '先醃' },
+        { name: '大白菜', amount: '4 片', method: '切細絲（菜梗要切極細）', group: '切絲' },
+        { name: '洋蔥', amount: '半顆', method: '切細絲', group: '切絲' },
+        { name: '紅甜椒', amount: '1/4 顆', method: '切極細絲', group: '切絲' },
+        { name: '黃甜椒', amount: '1/4 顆', method: '切極細絲', group: '切絲' },
+        { name: '大蔥', amount: '半根', method: '切薄片', group: '切片' },
+        { name: '秀珍菇', amount: '10 朵', method: '用手撕成細條', group: '開火前放旁邊' },
+        { name: '醬香炒麵醬汁', amount: '醬油 1 匙・糖 1 茶匙・白胡椒粉・水 2 匙', method: '先調好放旁邊', group: '調醬汁' },
+        { name: '生麵條', amount: '240g', method: '煮到九分熟，沖冷水瀝乾，拌少許油防黏', group: '開火前放旁邊' },
+      ],
     },
     {
       id: 10,
@@ -2132,6 +2272,11 @@
         [10, '放涼後冷藏'],
         [130, '可以開吃 ✅'],
       ],
+      prepNotes: [
+        { name: '洋蔥', amount: '半顆', method: '切一口大小（不要切太細，保留脆感）', group: '切塊' },
+        { name: '青辣椒', amount: '1 根', method: '切段', group: '切段' },
+      ],
+      urgentNote: '醃好後要冰至少 2 小時才入味，最好前一晚就做好，要吃的時候直接開蓋。',
     },
     {
       id: 11,
@@ -2199,6 +2344,18 @@
         [70, '撥散牛肉，冬粉吸汁'],
         [73, '加入大蔥，整鍋上桌'],
       ],
+      prepNotes: [
+        { name: '牛肉片', amount: '300g', method: '擦乾、切一口大小，放入梨汁醃醬中醃至少 1 小時', group: '先醃' },
+        { name: '黃金比例梨汁醃醬', amount: '梨汁 150ml・醬油 5 匙・清酒 1 匙・蒜末・芝麻油', method: '先在保鮮盒裡調好，再把牛肉放進去', group: '調醬汁' },
+        { name: '韓式冬粉', amount: '60g', method: '冷水泡 30 分鐘以上（沒泡夠中間會還是硬的）', group: '先泡' },
+        { name: '洋蔥', amount: '半顆', method: '切絲', group: '切絲' },
+        { name: '胡蘿蔔', amount: '1/4 根', method: '切細絲', group: '切絲' },
+        { name: '香菇', amount: '1 朵', method: '切片', group: '切片' },
+        { name: '杏鮑菇', amount: '1 朵', method: '切片', group: '切片' },
+        { name: '秀珍菇', amount: '數朵', method: '撕成小朵', group: '開火前放旁邊' },
+        { name: '大蔥', amount: '半根', method: '斜切段', group: '切段' },
+      ],
+      urgentNote: '牛肉先睡 1 小時，不然等等開火會太突然。韓式冬粉也要提前泡冷水 30 分鐘以上，泡軟才會乖乖吸湯汁。',
     },
     {
       id: 12,
@@ -2244,6 +2401,11 @@
         [22, '分成兩份下鍋煎'],
         [30, '兩張大餅上桌'],
       ],
+      prepNotes: [
+        { name: '馬鈴薯', amount: '3 顆', method: '去皮刨細絲，用力擠乾水分，靜置 10 分鐘讓澱粉沉澱後撈回', group: '切絲' },
+        { name: '青辣椒', amount: '1 根', method: '切薄片（鋪在表面裝飾用）', group: '切片' },
+      ],
+      urgentNote: '馬鈴薯刨絲後一定要靜置 10 分鐘等澱粉沉澱，那個白白黏黏的沉澱物就是讓薯餅黏起來的關鍵，急不得。',
     },
   ];
 
@@ -2757,6 +2919,44 @@
     }
   }
 
+  function switchCartTab(tab) {
+    document.getElementById('cart-tab-buy').style.display = tab === 'buy' ? '' : 'none';
+    document.getElementById('cart-tab-prep').style.display = tab === 'prep' ? '' : 'none';
+    document.querySelectorAll('.cart-tab').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.cart-tab[data-tab="${tab}"]`).classList.add('active');
+  }
+
+  function buildPrepView(selected) {
+    const GROUPS = ['先洗','先泡','先醃','切絲','切塊','切片','切段','切末','調醬汁','開火前放旁邊'];
+    const urgentItems = selected.filter(r => r.urgentNote).map(r => ({ title: r.title, note: r.urgentNote }));
+    const grouped = {};
+    GROUPS.forEach(g => { grouped[g] = []; });
+    selected.forEach(r => {
+      (r.prepNotes || []).forEach(p => {
+        if (grouped[p.group]) grouped[p.group].push(Object.assign({}, p, { from: r.title }));
+      });
+    });
+
+    let html = '';
+    if (urgentItems.length) {
+      html += '<div class="urgent-block"><div class="urgent-title">先做，不然會卡住</div>';
+      urgentItems.forEach(function(u) {
+        html += `<div class="urgent-item"><span class="urgent-recipe">${u.title}</span>：${u.note}</div>`;
+      });
+      html += '</div>';
+    }
+    GROUPS.forEach(g => {
+      const items = grouped[g];
+      if (!items.length) return;
+      html += `<div class="prep-group-hd">${g}</div>`;
+      items.forEach(p => {
+        html += `<div class="prep-row"><div class="prep-row-main">${p.name}｜${p.amount}｜${p.method}</div><div class="prep-row-from">${p.from}</div></div>`;
+      });
+    });
+    if (!html) html = '<div class="prep-empty">這幾道菜不需要特別備料提醒。</div>';
+    return html;
+  }
+
   function openCartModal() {
     const recipes = loadRecipes();
     const selected = recipes.filter(r => cartIds.has(r.id));
@@ -2831,6 +3031,8 @@
     document.getElementById('cart-modal-recipes').innerHTML =
       selected.map(r => `<span class="tag-dark">${r.title}</span>`).join('');
     document.getElementById('cart-modal-table').innerHTML = html;
+    document.getElementById('cart-prep-content').innerHTML = buildPrepView(selected);
+    switchCartTab('buy');
     document.getElementById('cartModal').classList.add('active');
   }
 
