@@ -1541,7 +1541,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '94';
+  const DATA_VERSION = '95';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2957,10 +2957,16 @@
   }
 
   document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (document.getElementById('cookMode').classList.contains('active')) { closeCookMode(); return; }
+      ['cartModal', 'addModal', 'detailModal'].forEach(function(id) {
+        if (document.getElementById(id).classList.contains('active')) closeModal(id);
+      });
+      return;
+    }
     if (!document.getElementById('cookMode').classList.contains('active')) return;
     if (e.key === 'ArrowLeft')  cookPrev();
     if (e.key === 'ArrowRight') cookNext();
-    if (e.key === 'Escape')     closeCookMode();
   });
 
   let _swipeX = null;
