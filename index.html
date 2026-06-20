@@ -165,11 +165,14 @@
     }
 
     .detail-hero {
-      height: 240px;
-      object-fit: cover;
       display: block;
-      margin: -20px -32px 20px;
-      width: calc(100% + 64px);
+      object-fit: contain;
+      max-height: 180px;
+      width: auto;
+      max-width: 55%;
+      margin: 4px auto 16px;
+      mix-blend-mode: multiply;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.06));
     }
 
     .card-header {
@@ -631,12 +634,12 @@
     .btn-cart-go:disabled { background: var(--cream); border: 1.5px solid var(--line); cursor: default; color: var(--text-muted); }
     #d-cart-btn {
       padding: 7px 16px; white-space: nowrap; flex-shrink: 0;
-      background: transparent; border: 1.5px solid var(--line);
-      color: var(--placeholder); font-size: 12px; letter-spacing: 1px;
+      background: var(--text); border: 1.5px solid var(--text);
+      color: var(--surface); font-size: 12px; letter-spacing: 1px;
       cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
-      transition: all 0.18s;
+      transition: all 0.18s; border-radius: var(--radius-sm);
     }
-    #d-cart-btn:hover { border-color: var(--brand); color: var(--brand); }
+    #d-cart-btn:hover { background: var(--brand); border-color: var(--brand); }
     #d-cart-btn.active { background: var(--brand); border-color: var(--brand); color: var(--surface); font-weight: bold; }
     /* ── 吉祥物 CTA 元件 ── */
     .mascot-img-mobile { display: none; }
@@ -785,7 +788,6 @@
       }
       .modal-overlay.active .modal { animation: slideUpModal 0.3s cubic-bezier(0.32, 0.72, 0, 1) both; }
       .modal-header { padding-top: 14px; }
-      .detail-hero { margin: -14px -20px 16px; width: calc(100% + 40px); }
       .modal-body { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
       .modal-title { font-size: 24px; }
       /* modal 開啟時隱藏底部橫帶 */
