@@ -277,12 +277,12 @@
     .modal-subtitle { font-size: 15px; color: var(--placeholder); }
     .recipe-note {
       font-size: 13.5px; color: var(--placeholder); line-height: 1.8;
-      padding: 2px 0 2px 16px; margin: 20px 0 24px;
+      padding: 2px 0 2px 16px; margin: 8px 0 24px;
       border-left: 2px dashed var(--line);
       font-style: italic;
     }
 
-    .modal-body { padding: 28px 32px; }
+    .modal-body { padding: 14px 32px 28px; }
 
     .modal-meta {
       display: flex;
@@ -768,7 +768,7 @@
       }
       #cart-sidebar { display: none; }
       .container { padding: 16px 16px 140px; }
-      .modal-body { padding: 24px 20px; }
+      .modal-body { padding: 12px 20px 24px; }
       .modal-header { padding: 24px 20px; }
       .modal-meta { flex-wrap: wrap; gap: 16px; }
       .form-row { grid-template-columns: 1fr; }
@@ -1272,16 +1272,10 @@
     <div class="modal-header">
       <img id="d-hero" class="detail-hero" alt="" style="display:none;">
       <button id="detail-modal-close" class="modal-close" onclick="closeModal('detailModal')">✕</button>
-      <div style="display:flex; align-items:flex-start; gap:12px;">
-        <div style="flex:1; min-width:0;">
-          <div class="modal-title" id="d-title"></div>
-          <div id="d-author" style="display:none; font-size:13px; color:var(--text-muted); margin-top:6px;"></div>
-        </div>
-        <div id="d-stars" style="flex-shrink:0; text-align:right; padding-top:6px;"></div>
-      </div>
-      <div class="modal-tags-row" style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:14px;">
-        <div id="d-tags" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
-        <button id="d-cart-btn" onclick="toggleCartFromDetail()">🛒 加入購物清單</button>
+      <div class="modal-title" id="d-title"></div>
+      <div style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+        <div id="d-author" style="display:none; font-size:13px; color:var(--text-muted); flex:1;"></div>
+        <button id="d-cart-btn" onclick="toggleCartFromDetail()" style="margin-left:auto;">🛒 加入購物清單</button>
       </div>
     </div>
     <div class="modal-body">
@@ -2284,9 +2278,6 @@
     currentPortions = r.basePortions;
 
     document.getElementById('d-title').textContent = r.title;
-    document.getElementById('d-stars').innerHTML = `<div style="font-size:18px;line-height:1;">${'⭐'.repeat(r.stars||1)}</div><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--placeholder);margin-top:4px;">${r.starsLabel||''}</div>`;
-    document.getElementById('d-tags').innerHTML =
-      (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
     const heroEl1 = document.getElementById('d-hero');
     heroEl1.src = r.image || ''; heroEl1.style.display = r.image ? 'block' : 'none';
     document.getElementById('d-time').textContent = r.time;
@@ -2847,9 +2838,6 @@
     currentPortions = r.basePortions;
 
     document.getElementById('d-title').textContent = r.title;
-    document.getElementById('d-stars').innerHTML = `<div style="font-size:18px;line-height:1;">${'⭐'.repeat(r.stars||1)}</div><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--placeholder);margin-top:4px;">${r.starsLabel||''}</div>`;
-    const cuisineHtml = r.cuisine ? `<span class="tag-dark">${r.cuisine}</span>` : '';
-    document.getElementById('d-tags').innerHTML = cuisineHtml + (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
     const heroEl2 = document.getElementById('d-hero');
     heroEl2.src = r.image || ''; heroEl2.style.display = r.image ? 'block' : 'none';
     document.getElementById('d-time').textContent = r.time;
