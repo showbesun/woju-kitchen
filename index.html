@@ -1267,6 +1267,7 @@
         <div class="meta-item">
           <span class="meta-label">時間</span>
           <span class="meta-value" id="d-time"></span>
+          <small id="d-time-note" style="display:none; color:var(--text-muted); font-size:12px; margin-top:2px;"></small>
         </div>
         <div class="portion-scaler">
           <label>幾人份？</label>
@@ -1541,7 +1542,7 @@
 
 <script>
   const STORAGE_KEY = 'jajuibang_recipes';
-  const DATA_VERSION = '97';
+  const DATA_VERSION = '98';
   const VERSION_KEY = 'jajuibang_version';
 
   const defaultRecipes = [
@@ -2098,6 +2099,7 @@
       tags: ['牛肉', '鍋物', '下飯菜', '想吃熱的'],
       basePortions: 2,
       time: '約 1 小時 15 分鐘',
+      timeNote: '牛肉先睡 1 小時，開火 15 分鐘就能上桌。',
       shoppingList: [
         ['牛肉片', 300, 'g'],
         ['洋蔥', 0.5, '顆'],
@@ -2261,6 +2263,8 @@
     document.getElementById('d-tags').innerHTML =
       (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
     document.getElementById('d-time').textContent = r.time;
+    const tnEl1 = document.getElementById('d-time-note');
+    tnEl1.textContent = r.timeNote || ''; tnEl1.style.display = r.timeNote ? 'block' : 'none';
     document.getElementById('d-portion-count').textContent = currentPortions;
     const noteEl = document.getElementById('d-note');
     if (r.note) { noteEl.textContent = r.note; noteEl.style.display = ''; }
@@ -2811,6 +2815,8 @@
     const cuisineHtml = r.cuisine ? `<span class="tag-dark">${r.cuisine}</span>` : '';
     document.getElementById('d-tags').innerHTML = cuisineHtml + (r.tags || []).map(t => `<span class="tag-dark">${t}</span>`).join('');
     document.getElementById('d-time').textContent = r.time;
+    const tnEl2 = document.getElementById('d-time-note');
+    tnEl2.textContent = r.timeNote || ''; tnEl2.style.display = r.timeNote ? 'block' : 'none';
     document.getElementById('d-portion-count').textContent = currentPortions;
     document.getElementById('d-note').style.display = 'none';
     const authorEl = document.getElementById('d-author');
