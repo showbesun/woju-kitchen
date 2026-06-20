@@ -795,7 +795,9 @@
       .modal-cuisine { display: none; }
       /* tags + 購物清單按鈕改為垂直排列 */
       .modal-tags-row { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
-      #d-cart-btn { width: 100%; text-align: center; padding: 10px 0; }
+      #d-cart-btn { width: auto; padding: 7px 14px; }
+      #detailModal .modal { display: block; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+      #detailModal .modal-body { overflow-y: visible; flex: none; }
       /* 放大觸控目標 */
       .portion-btn { width: 44px; height: 44px; }
       .cart-btn { width: 40px; height: 40px; top: 8px; right: 8px; font-size: 17px; }
