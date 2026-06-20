@@ -101,12 +101,17 @@
       border-bottom: 1px solid var(--line);
     }
 
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+    }
     .search-input {
       flex: 1;
       background: var(--surface);
       border: 1px solid var(--line);
       color: var(--text);
-      padding: 10px 16px;
+      padding: 10px 36px 10px 16px;
       font-size: 14px;
       border-radius: var(--radius-sm);
       font-family: 'Noto Sans TC', 'Noto Sans KR', sans-serif;
@@ -114,6 +119,13 @@
     }
     .search-input::placeholder { color: #bbb; }
     .search-input:focus { border-color: var(--brand); }
+    .search-clear {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: #bbb; font-size: 16px; line-height: 1; padding: 2px 4px;
+      display: none;
+    }
+    .search-clear:hover { color: var(--text); }
 
     .filter-select {
       background: var(--surface);
@@ -1214,7 +1226,10 @@
 </header>
 
 <div class="search-bar">
-  <input class="search-input" type="text" id="searchInput" placeholder="搜尋食譜名稱、菜系、標籤..." inputmode="search" oninput="renderRecipes()" />
+  <div class="search-input-wrap">
+    <input class="search-input" type="text" id="searchInput" placeholder="搜尋食譜名稱、菜系、標籤..." inputmode="search" oninput="onSearchInput()" />
+    <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+  </div>
   <select class="filter-select" id="cuisineFilter" onchange="renderRecipes()">
     <option value="">所有菜系</option>
     <option value="中式">中式</option>
@@ -2405,6 +2420,20 @@
       .replace(/（[^）]*）/g, '').replace(/\([^)]*\)/g, '')
       .replace(/約\s*/g, '≈ ').replace(/小時/g, 'Hr').replace(/分鐘/g, 'Min')
       .trim();
+  }
+
+  function onSearchInput() {
+    const val = document.getElementById('searchInput').value;
+    document.getElementById('searchClear').style.display = val ? 'block' : 'none';
+    renderRecipes();
+  }
+
+  function clearSearch() {
+    const input = document.getElementById('searchInput');
+    input.value = '';
+    document.getElementById('searchClear').style.display = 'none';
+    input.focus();
+    renderRecipes();
   }
 
   function renderRecipes() {
