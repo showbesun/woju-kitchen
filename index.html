@@ -2635,7 +2635,7 @@
     if (!currentRecipe) return;
     const btn = document.getElementById('d-cart-btn');
     const inCart = cartIds.has(currentRecipe.id);
-    btn.textContent = inCart ? '✓ 已加入清單' : '🛒 加入購物清單';
+    btn.textContent = inCart ? '✓ 已加入清單' : '加入購物清單';
     btn.classList.toggle('active', inCart);
   }
 
