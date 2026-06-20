@@ -2388,6 +2388,13 @@
     renderRecipes();
   }
 
+  function cardTime(t) {
+    return (t || '')
+      .replace(/（[^）]*）/g, '').replace(/\([^)]*\)/g, '')
+      .replace(/約\s*/g, '≈ ').replace(/小時/g, 'Hr').replace(/分鐘/g, 'Min')
+      .trim();
+  }
+
   function renderRecipes() {
     const recipes = loadRecipes();
     const search = document.getElementById('searchInput').value.toLowerCase();
@@ -2428,7 +2435,7 @@
           <div class="card-meta">
             <div class="meta-item">
               <span class="meta-label">時間</span>
-              <span class="meta-value">${r.time}</span>
+              <span class="meta-value">${cardTime(r.time)}</span>
             </div>
             <div class="meta-item" style="text-align:right">
               <span class="meta-label">蝸居評鑑</span>
